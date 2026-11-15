@@ -6,8 +6,8 @@ export const missions = [
 ]
 
 export const crew = [
-  { id: 'elena', name: 'Cmdr. Elena Vance', role: 'Commander', age: 41, gender: 'female', profile: 'female', cycle: 'Menstrual suppression' },
-  { id: 'lucas', name: 'Eng. Lucas Silva', role: 'Systems Engineer', age: 36, gender: 'male', profile: 'male', cycle: 'Nominal physiological profile' },
+  { id: 'aurora', name: 'Cmdr. Aurora Solis', role: 'Commander', age: 41, gender: 'female', profile: 'female', cycle: 'Menstrual suppression' },
+  { id: 'atlas', name: 'Eng. Atlas Cole', role: 'Systems Engineer', age: 36, gender: 'male', profile: 'male', cycle: 'Nominal physiological profile' },
 ]
 
 export const fallbackDonkiPayload = [

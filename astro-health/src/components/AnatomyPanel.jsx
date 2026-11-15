@@ -83,7 +83,7 @@ export function AnatomyPanel({ mission, selectedZone, setSelectedZone, crew }) {
       <div className="anatomy-visual holographic-scanner">
         <div className="telemetry-grid" /><div className={`scan-line ${scanPaused ? 'paused' : ''}`}><span>SCANNING</span></div><div className="scan-ring ring-one" /><div className="scan-ring ring-two" />
         <div className="scanner-bracket bracket-tl" /><div className="scanner-bracket bracket-tr" /><div className="scanner-bracket bracket-bl" /><div className="scanner-bracket bracket-br" />
-        <div className="scanner-topbar"><span>● BIO-SCAN / {currentUser.gender === 'female' ? 'EV' : 'LS'}</span><span>ANTERIOR VIEW</span></div><div className="scanner-scale" aria-hidden="true">{[0, 20, 40, 60, 80, 100].map((tick) => <i key={tick} style={{ top: `${tick}%` }}><b>{tick}</b></i>)}</div>
+        <div className="scanner-topbar"><span>● BIO-SCAN / {currentUser.gender === 'female' ? 'AS' : 'AC'}</span><span>ANTERIOR VIEW</span></div><div className="scanner-scale" aria-hidden="true">{[0, 20, 40, 60, 80, 100].map((tick) => <i key={tick} style={{ top: `${tick}%` }}><b>{tick}</b></i>)}</div>
         <div className="body-chart-host"><HolographicBodyModel key={currentUser.id} gender={currentUser.gender} selectedZone={selectedZone} handleSelectRegion={handleSelectRegion} /></div>
         <div className="scanner-bottombar"><span>ANATOMICAL MODEL</span><span>SVG / LIVE TELEMETRY</span></div>
       </div>

@@ -8,7 +8,7 @@ const modules = [
 ]
 
 export function Sidebar({ activeCrew, module, setModule, mission, onLock, gamification, onAward, mobileMenuOpen }) {
-  const modulesForCrew = activeCrew.id === 'elena' ? modules : modules.filter((item) => item.id !== 'female')
+  const modulesForCrew = activeCrew.id === 'aurora' ? modules : modules.filter((item) => item.id !== 'female')
   return <aside className={`sentinel-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
     <div className="sidebar-crew">
       <p className="sidebar-label">AUTHENTICATED CREW MEMBER</p>
