@@ -1,27 +1,24 @@
-import { Activity, Gauge, Heart, Thermometer, Waves } from 'lucide-react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from 'recharts'
+import { Activity, Brain, CheckCircle2, ChevronRight, HeartPulse, Radiation, Thermometer, Waves } from 'lucide-react'
 
-const baseVitals = [
-  { id: 'heart', label: 'Frequência Cardíaca', unit: 'BPM', value: '72', icon: Heart, color: '#f27272', data: [68, 71, 70, 74, 72, 76, 72, 73], normal: '60—100' },
-  { id: 'spo2', label: 'SpO2', unit: '%', value: '98', icon: Waves, color: '#62d1c0', data: [97, 98, 97, 98, 99, 98, 98, 98], normal: '95—100' },
-  { id: 'pressure', label: 'Pressão Arterial', unit: 'mmHg', value: '118/76', icon: Gauge, color: '#e5bd70', data: [116, 121, 119, 118, 120, 117, 118, 118], normal: '90—140' },
-  { id: 'temp', label: 'Temperatura Corporal', unit: '°C', value: '36.7', icon: Thermometer, color: '#9aa9f7', data: [36.5, 36.6, 36.7, 36.8, 36.7, 36.7, 36.6, 36.7], normal: '36.1—37.2' },
+const vitals = [
+  { id: 'heart', label: 'Frequência cardíaca', value: '68', unit: 'bpm', normal: 'Zona verde: 52–100 bpm', icon: HeartPulse, data: [64, 67, 65, 69, 68, 70, 68] },
+  { id: 'spo2', label: 'SpO2', value: '98.2', unit: '%', normal: 'Zona verde: 95–100%', icon: Waves, data: [97.8, 98, 98.1, 98.2, 98, 98.3, 98.2] },
+  { id: 'pressure', label: 'Pressão arterial', value: '106/69', unit: 'mmHg', normal: 'Zona verde: sist. 95–132', icon: Activity, data: [104, 108, 106, 105, 107, 106, 106] },
+  { id: 'temp', label: 'Temperatura corporal', value: '37.1', unit: '°C', normal: 'Zona verde: 36.5–37.8 °C', icon: Thermometer, data: [36.9, 37, 37.1, 37.1, 37.2, 37.1, 37.1] },
+  { id: 'radiation', label: 'Radiação acumulada', value: '172.0', unit: 'mSv', normal: 'Zona verde: taxa ≤ 110 µSv/h', icon: Radiation, data: [158, 161, 163, 165, 168, 170, 172] },
 ]
 
-export function VitalSignsGrid({ mission, crew }) {
-  const multiplier = mission.id === 'transit' ? 1.08 : mission.id === 'lunar' ? 1.03 : 1
-  const vitals = baseVitals.map((item) => ({ ...item, data: item.data.map((value) => Number((value * multiplier).toFixed(2))) }))
-  const dose = mission.id === 'orbit' ? '0.42' : mission.id === 'transit' ? '2.87' : mission.id === 'lunar' ? '1.64' : '1.91'
-
-  return <div className="grid gap-5 sm:grid-cols-2"><div className="col-span-full flex items-center justify-between"><div><p className="eyebrow"><Activity size={13} /> SINAIS VITAIS</p><h2 className="panel-title">Telemetria em tempo real</h2></div><div className="text-right"><p className="text-[10px] uppercase tracking-widest text-slate-500">Tripulante</p><p className="text-xs text-slate-300">{crew.name}</p></div></div>{vitals.map((vital) => <VitalCard key={vital.id} vital={vital} mission={mission} />)}<RadiationCard mission={mission} dose={dose} /></div>
+export function VitalSignsGrid({ onModule, solarEvent }) {
+  const radiationRate = solarEvent.active ? solarEvent.radiationRate : 80
+  const radiationDose = (172 + solarEvent.addedDose).toFixed(1)
+  const displayVitals = vitals.map((vital) => vital.id === 'radiation'
+    ? { ...vital, value: radiationDose, data: solarEvent.active ? [172, 210, 265, 310, 350, 390, 420] : [158, 161, 163, 165, 168, 170, 172], normal: solarEvent.active ? `Zona vermelha: ${radiationRate} µSv/h` : vital.normal }
+    : vital)
+  return <section className="dashboard-section vitals-section"><div className="section-heading"><div><p className="eyebrow"><Activity size={13} /> BIO-MONITOR CONECTADO · LIMITES CALIBRADOS PARA ESPAÇO PROFUNDO</p><h3>Sinais vitais <span>· tempo real</span></h3></div><span className={`connected-label ${solarEvent.active ? 'critical-label' : ''}`}><span className="status-dot" /> {solarEvent.active ? `SEP ativo · ${radiationRate} µSv/h` : 'Atualização a cada 5s'}</span></div><div className="vitals-grid">{displayVitals.map((vital) => <VitalCard key={vital.id} vital={vital} />)}<article className="recalibration-card"><div className="recalibration-copy"><p className="eyebrow"><Brain size={13} /> AJUSTE AUTÔNOMO</p><h4>Recalibração automática</h4><p>As zonas verdes mudam conforme gravidade, latência e radiação do ambiente atual.</p><button type="button" className="detail-action" onClick={() => onModule('cognitive')}>Fazer check-up cognitivo <ChevronRight size={14} /></button></div><div className="quick-metrics"><span><b>Limiar trombose</b>+4% panturrilha</span><span><b>Panturrilha hoje</b>+3.3%</span><span><b>Hemoglobina</b>12.9 g/dL</span><span><b>Carreira</b>{radiationDose} de 600 mSv</span></div></article></div></section>
 }
 
-function VitalCard({ vital, mission }) {
+function VitalCard({ vital }) {
   const Icon = vital.icon
-  return <article className="vital-card"><div className="flex items-start justify-between"><div className="icon-tile" style={{ color: vital.color, backgroundColor: `${vital.color}16` }}><Icon size={17} /></div><span className="normal-pill">NORMAL · {vital.normal}</span></div><div className="mt-4 flex items-end justify-between"><div><p className="text-xs text-slate-400">{vital.label}</p><p className="mt-1 font-mono text-3xl tracking-tight text-white">{vital.value}<span className="ml-1 text-xs text-slate-500">{vital.unit}</span></p></div><span className="trend-up">↑ 1.2%</span></div><div className="chart-wrap"><ResponsiveContainer width="100%" height="100%"><AreaChart data={vital.data.map((value, index) => ({ index, value }))}><defs><linearGradient id={`fill-${vital.id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={mission.accent} stopOpacity=".35" /><stop offset="100%" stopColor={mission.accent} stopOpacity="0" /></linearGradient></defs><YAxis domain={['dataMin - 2', 'dataMax + 2']} hide /><Tooltip content={() => null} /><Area type="monotone" dataKey="value" stroke={mission.accent} fill={`url(#fill-${vital.id})`} strokeWidth={2} dot={false} /></AreaChart></ResponsiveContainer></div></article>
-}
-
-function RadiationCard({ mission, dose }) {
-  const critical = mission.radiationLevel === 'critical'
-  return <article className={`vital-card radiation-card sm:col-span-2 ${critical ? 'critical' : ''}`}><div className="flex items-center justify-between"><div className="flex items-center gap-3"><div className="icon-tile text-orange-300"><Activity size={17} /></div><div><p className="text-xs text-slate-400">Dose Cumulativa de Radiação</p><p className="mt-1 font-mono text-3xl text-white">{dose}<span className="ml-1 text-xs text-slate-500">mSv</span></p></div></div><div className="text-right"><span className={`normal-pill ${critical ? 'warning' : ''}`}>{critical ? 'ATENÇÃO' : 'DENTRO DO LIMITE'}</span><p className="mt-2 text-[10px] text-slate-500">Limite da fase: {critical ? '5.00' : '3.00'} mSv</p></div></div><div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-800"><div className={`h-full rounded-full ${critical ? 'bg-red-400' : 'bg-orange-300'}`} style={{ width: `${critical ? 57 : 28}%` }} /></div></article>
+  return <article className="vital-card"><div className="vital-card-top"><div className="icon-tile"><Icon size={17} /></div><CheckCircle2 size={15} className="text-emerald-400" /></div><p>{vital.label}</p><strong>{vital.value}<small>{vital.unit}</small></strong><span className="vital-normal">{vital.normal}</span><div className="chart-wrap"><ResponsiveContainer width="100%" height="100%"><AreaChart data={vital.data.map((value, index) => ({ index, value }))}><defs><linearGradient id={`fill-${vital.id}`} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#55d6a5" stopOpacity=".32" /><stop offset="100%" stopColor="#55d6a5" stopOpacity="0" /></linearGradient></defs><YAxis domain={['dataMin - 2', 'dataMax + 2']} hide /><Tooltip content={() => null} /><Area type="monotone" dataKey="value" stroke="#55d6a5" fill={`url(#fill-${vital.id})`} strokeWidth={2} dot={false} /></AreaChart></ResponsiveContainer></div></article>
 }

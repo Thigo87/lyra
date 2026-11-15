@@ -1,116 +1,95 @@
-import { useMemo, useState } from 'react'
-import { Activity, Radio, Shield, Telescope } from 'lucide-react'
-import { AnatomyPanel } from './components/AnatomyPanel'
-import { MissionHeader } from './components/MissionHeader'
-import { VitalSignsGrid } from './components/VitalSignsGrid'
+import { useEffect, useMemo, useState } from 'react'
+import { SentinelHeader } from './components/SentinelHeader'
+import { Sidebar } from './components/Sidebar'
+import { MissionDashboard } from './components/MissionDashboard'
+import { MissionModules } from './components/MissionModules'
+import { LockScreen } from './components/LockScreen'
+import { crew, fallbackDonkiPayload, missions } from './data/missionData'
 import './App.css'
 
-const missions = [
-  {
-    id: 'orbit',
-    name: 'Órbita Terrestre',
-    context: 'ISS',
-    gravity: '0g',
-    latency: '<1s',
-    radiation: 'Baixa',
-    radiationLevel: 'low',
-    accent: '#55d6a5',
-    phase: 'FASE 01',
-  },
-  {
-    id: 'transit',
-    name: 'Trânsito Terra-Marte',
-    context: 'Espaço Profundo',
-    gravity: '0g',
-    latency: '14 min',
-    radiation: 'Crítica',
-    radiationLevel: 'critical',
-    accent: '#ff6b5f',
-    phase: 'FASE 02',
-  },
-  {
-    id: 'lunar',
-    name: 'Superfície Lunar',
-    context: 'Artemis',
-    gravity: '0.16g',
-    latency: '1.3s',
-    radiation: 'Alta',
-    radiationLevel: 'high',
-    accent: '#f5bc63',
-    phase: 'FASE 03',
-  },
-  {
-    id: 'mars',
-    name: 'Superfície de Marte',
-    context: 'Base',
-    gravity: '0.38g',
-    latency: '18 min',
-    radiation: 'Alta',
-    radiationLevel: 'high',
-    accent: '#f5bc63',
-    phase: 'FASE 04',
-  },
-]
-
-const crew = [
-  { id: 'elena', name: 'Cmdr. Elena Vance', gender: 'Feminino', role: 'Comandante' },
-  { id: 'lucas', name: 'Eng. Lucas Silva', gender: 'Masculino', role: 'Engenheiro de voo' },
-]
-
 function App() {
-  const [missionId, setMissionId] = useState('orbit')
-  const [crewId, setCrewId] = useState('elena')
-  const [selectedZone, setSelectedZone] = useState('head')
+  const [missionId, setMissionId] = useState('transit')
+  const [crewId, setCrewId] = useState(null)
+  const [emergencyAccess, setEmergencyAccess] = useState(false)
+  const [module, setModule] = useState('dashboard')
+  const [selectedZone, setSelectedZone] = useState('chest')
+  const [missionSeconds, setMissionSeconds] = useState(96 * 86400 + 12 * 3600 + 34 * 60 + 18)
+  const [donkiStatus, setDonkiStatus] = useState('Consultando feed NASA DONKI…')
+  const [donkiPayload, setDonkiPayload] = useState(fallbackDonkiPayload)
+  const [donkiPayloadOpen, setDonkiPayloadOpen] = useState(false)
+  const [stormSimulated, setStormSimulated] = useState(false)
+  const [readinessXp, setReadinessXp] = useState(1250)
+  const [completedQuests, setCompletedQuests] = useState([])
+  const [achievement, setAchievement] = useState(null)
   const mission = useMemo(() => missions.find((item) => item.id === missionId), [missionId])
   const selectedCrew = crew.find((item) => item.id === crewId)
+  const solarEvent = { active: stormSimulated, radiationRate: stormSimulated ? 420 : 80, addedDose: stormSimulated ? 8.4 : 0 }
+  const gamification = {
+    xp: readinessXp,
+    level: Math.floor(readinessXp / 300),
+    progress: ((readinessXp % 300) / 300) * 100,
+    streak: 12,
+    completedQuests,
+  }
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setMissionSeconds((seconds) => seconds + 1), 1000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), 3000)
+    fetch('https://api.nasa.gov/DONKI/SEP?api_key=DEMO_KEY', { signal: controller.signal })
+      .then((response) => { if (!response.ok) throw new Error('DONKI indisponível'); return response.json() })
+      .then((payload) => { setDonkiPayload(payload); setDonkiStatus('Feed NASA DONKI ativo') })
+      .catch(() => setDonkiStatus('Feed NASA DONKI ativo · payload histórico offline'))
+      .finally(() => window.clearTimeout(timeout))
+    return () => { window.clearTimeout(timeout); controller.abort() }
+  }, [])
+
+  const emergency = () => setModule('emergency')
+  const lockTerminal = () => { setCrewId(null); setEmergencyAccess(false); setModule('dashboard') }
+  const awardXp = (questId, amount, title) => {
+    if (completedQuests.includes(questId)) return
+    setCompletedQuests((quests) => [...quests, questId])
+    setReadinessXp((xp) => xp + amount)
+    setAchievement({ title, amount })
+    window.setTimeout(() => setAchievement(null), 4200)
+  }
+
+  if (!crewId && !emergencyAccess) return <LockScreen crew={crew} onLogin={(id) => setCrewId(id)} onEmergency={() => setEmergencyAccess(true)} />
+
+  if (emergencyAccess && !crewId) return <main className="emergency-standalone"><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} /></main>
 
   return (
-    <main className="min-h-screen bg-[#070b12] text-slate-100">
-      <MissionHeader
+    <main className="sentinel-app">
+      <SentinelHeader
+        mission={mission}
         missions={missions}
         missionId={missionId}
         setMissionId={setMissionId}
-        crew={crew}
-        crewId={crewId}
-        setCrewId={setCrewId}
+        missionSeconds={missionSeconds}
+        onEmergency={emergency}
+        donkiStatus={stormSimulated ? 'Alerta SEP simulado · protocolo ativo' : donkiStatus}
+        onSimulateStorm={() => setStormSimulated((value) => !value)}
+        stormSimulated={stormSimulated}
+        solarEvent={solarEvent}
+        donkiPayload={donkiPayload}
+        donkiPayloadOpen={donkiPayloadOpen}
+        setDonkiPayloadOpen={setDonkiPayloadOpen}
       />
-
-      <div className="mx-auto max-w-[1500px] px-5 pb-10 pt-7 lg:px-10">
-        <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
-          <div>
-            <p className="eyebrow mb-2"><Radio size={13} /> TELEMETRIA BIOMÉDICA / ONLINE</p>
-            <h1 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Centro de Saúde da Missão
-            </h1>
-            <p className="mt-2 text-sm text-slate-400">
-              Monitoramento fisiológico em tempo real · {selectedCrew.name}
-            </p>
-          </div>
-          <div className="flex items-center gap-3 rounded-lg border border-slate-800 bg-[#0b111c] px-4 py-3">
-            <span className="status-dot" />
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Link de dados</p>
-              <p className="font-mono text-xs text-emerald-300">ESTÁVEL · 98.7%</p>
-            </div>
-          </div>
-        </div>
-
-        <section className="grid gap-5 xl:grid-cols-[minmax(390px,0.82fr)_minmax(620px,1.55fr)]">
-          <AnatomyPanel
-            mission={mission}
-            selectedZone={selectedZone}
-            setSelectedZone={setSelectedZone}
-            crew={selectedCrew}
-          />
-          <VitalSignsGrid mission={mission} crew={selectedCrew} />
+      <div className="sentinel-body">
+        <Sidebar activeCrew={selectedCrew} module={module} setModule={setModule} mission={mission} onLock={lockTerminal} gamification={gamification} onAward={awardXp} />
+        <section className="sentinel-content">
+          {module === 'dashboard' ? (
+            <MissionDashboard mission={mission} crew={selectedCrew} selectedZone={selectedZone} setSelectedZone={setSelectedZone} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} />
+          ) : (
+            <MissionModules module={module} crew={selectedCrew} mission={mission} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} />
+          )}
         </section>
-
-        <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-slate-800/80 pt-5 text-[10px] uppercase tracking-[0.16em] text-slate-600">
-          <span className="flex items-center gap-2"><Shield size={13} /> Protocolo de segurança médica · NASA-STD-3001</span>
-          <span className="flex items-center gap-2"><Telescope size={13} /> Sistema Orion Health v1.0.0</span>
-          <span className="flex items-center gap-2"><Activity size={13} /> Última sincronização: agora</span>
-        </footer>
       </div>
+      {achievement && <div className="achievement-toast"><span className="achievement-medal">★</span><div><p>CONQUISTA DESBLOQUEADA</p><strong>{achievement.title}</strong><small>+{achievement.amount} XP de Prontidão Médica</small></div></div>}
     </main>
   )
 }

@@ -43,9 +43,6 @@ export function AnatomyPanel({ mission, selectedZone, setSelectedZone, crew }) {
     chartRef.current = new BodyChart(chartContainerRef.current, {
       view: ViewSide.FRONT,
       bodyState: getBodyState(selectedZoneRef.current),
-      // Kept in the options for body-muscles versions that support sex-specific assets.
-      gender: avatarGender,
-      sex: avatarGender,
       className: `orion-body-chart gender-${avatarGender}`,
       ariaLabel: 'Mapa anatômico anterior para monitoramento espacial',
       enableTransitions: true,
@@ -76,7 +73,7 @@ export function AnatomyPanel({ mission, selectedZone, setSelectedZone, crew }) {
         <div className="anatomy-visual">
           <div className="telemetry-grid" /><div className="scan-line" />
           <div className="scan-ring ring-one" /><div className="scan-ring ring-two" />
-          <div ref={chartContainerRef} className="body-chart-host" />
+          <div key={crew.id} ref={chartContainerRef} className="body-chart-host" />
           <span className="anatomy-caption">BIO-SCAN / {crew.name.replace(/^(Cmdr\.|Eng\.)\s/, '').toUpperCase()} ({avatarGender === 'female' ? 'F' : 'M'}) {hoveredMuscle ? `· ${hoveredMuscle}` : ''}</span>
         </div>
         <div className="zone-list">
