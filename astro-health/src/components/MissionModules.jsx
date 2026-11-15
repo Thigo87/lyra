@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Activity, Anchor, ArrowLeft, Brain, CircleAlert, Droplets, Dumbbell, FlaskConical, Gauge, HeartPulse, LockKeyhole, Package, Pill, Radiation, RotateCcw, Scale, ScanLine, Send, ShieldAlert, ShieldCheck, Timer, Trophy, UserRound } from 'lucide-react'
+import { EmergencyTriageForm } from './EmergencyTriageForm'
 import { OpticalBioScanner } from './OpticalBioScanner'
 
 export function MissionModules({ module, crew, mission, onModule, solarEvent, onAward, onDispatch, onOpticalHeartRate, opticalSnapshot, onOpticalSnapshot, onRadiationSync, onRadiationBurst }) {
@@ -134,7 +135,7 @@ function ScenarioSelector({ active, onChange }) {
 
 function EmergencyGuided({ mission, crew, onModule, onAward, onDispatch, onOpticalHeartRate, opticalSnapshot, onOpticalSnapshot }) {
   const [scenario, setScenario] = useState('chest')
-  return <ModuleShell eyebrow="MODULE 03 · EMERGENCY COCKPIT" title="Guided Emergency" description={`${mission.name} · low-cognitive-load protocol`} onModule={onModule}><ScenarioSelector active={scenario} onChange={setScenario} />{scenario === 'chest' && <ChestTraining mission={mission} onReset={() => setScenario('chest')} onDispatch={onDispatch} onOpticalHeartRate={onOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={onOpticalSnapshot} />}{scenario === 'thrombosis' && <ThrombosisTraining mission={mission} onAward={onAward} onReset={() => setScenario('thrombosis')} onDispatch={onDispatch} />}{scenario === 'radiation' && <RadiationTraining crew={crew} mission={mission} onAward={onAward} onReset={() => setScenario('radiation')} onDispatch={onDispatch} />}</ModuleShell>
+  return <ModuleShell eyebrow="MODULE 03 · EMERGENCY COCKPIT" title="Guided Emergency" description={`${mission.name} · low-cognitive-load protocol`} onModule={onModule}><EmergencyTriageForm initialBiologicalProfile={crew?.gender === 'male' ? 'male' : 'female'} radiationIndex={mission.gravity === '0g' ? 1.2 : 0.5} biometricTelemetry={{ bpm: 72, temperature: 36.8, systolic: 115, radiation: mission.gravity === '0g' ? 1.2 : 0.5 }} /><ScenarioSelector active={scenario} onChange={setScenario} />{scenario === 'chest' && <ChestTraining mission={mission} onReset={() => setScenario('chest')} onDispatch={onDispatch} onOpticalHeartRate={onOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={onOpticalSnapshot} />}{scenario === 'thrombosis' && <ThrombosisTraining mission={mission} onAward={onAward} onReset={() => setScenario('thrombosis')} onDispatch={onDispatch} />}{scenario === 'radiation' && <RadiationTraining crew={crew} mission={mission} onAward={onAward} onReset={() => setScenario('radiation')} onDispatch={onDispatch} />}</ModuleShell>
 }
 
 function TrainingHeader({ label, step, complete }) {
