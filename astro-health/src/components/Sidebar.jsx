@@ -1,9 +1,10 @@
-import { Activity, Brain, HeartPulse, LockKeyhole, ShieldAlert, Trophy, Zap } from 'lucide-react'
+import { Activity, Brain, ClipboardList, HeartPulse, LockKeyhole, ShieldAlert, Trophy, Zap } from 'lucide-react'
 
 const modules = [
   { id: 'dashboard', label: 'Crew Dashboard', icon: Activity },
   { id: 'female', label: "Women's Health", icon: HeartPulse },
   { id: 'emergency', label: 'Guided Emergency', icon: ShieldAlert },
+  { id: 'history', label: 'History & Medical Record', icon: ClipboardList },
   { id: 'cognitive', label: 'Cognitive Readiness', icon: Brain },
 ]
 

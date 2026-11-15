@@ -11,7 +11,7 @@ function blendshapeScore(categories) {
   return Math.round(Math.min(10, (ocular * .58 + jaw * .42) * 10) * 10) / 10
 }
 
-export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore }) {
+export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScoreChange }) {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
   const landmarkerRef = useRef(null)
@@ -25,9 +25,9 @@ export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore
   const setMeasuredScore = (value) => {
     const next = Math.round(Math.max(0, Math.min(10, value)) * 10) / 10
     setScore(next)
-    onStressScore?.(next)
+    onStressScoreChange?.(next)
   }
-  const discrepancy = score >= 6 && declaredSymptomScore <= 3
+  const discrepancy = score >= 6.5 && declaredSymptomScore <= 3
 
   useEffect(() => () => {
     if (animationRef.current) cancelAnimationFrame(animationRef.current)
@@ -50,7 +50,7 @@ export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore
     setSimulation(true)
     setActive(true)
     setError('')
-    setStatus('Simulation telemetry active')
+    setStatus('Simulation mode active')
     const tick = () => {
       const next = 5.2 + Math.sin(Date.now() / 1200) * 1.8
       setMeasuredScore(next)
@@ -73,7 +73,7 @@ export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore
 
   const startCamera = async () => {
     setError('')
-    setStatus('Requesting camera')
+    setStatus('Requesting camera access')
     try {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error('Camera API unavailable')
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
@@ -96,7 +96,7 @@ export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore
       animationRef.current = requestAnimationFrame(runDetection)
     } catch {
       streamRef.current?.getTracks().forEach((track) => track.stop())
-      setError('Camera or face model unavailable. Use simulation telemetry for this session.')
+      setError('Camera or face model unavailable. Use simulation mode for this session.')
       setStatus('Fallback available')
     }
   }
@@ -106,15 +106,15 @@ export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore
     <div className="facial-monitor-body">
       <div className="facial-monitor-feed">
         <video ref={videoRef} muted playsInline className={active && !simulation ? 'visible' : ''} />
-        {!active || simulation ? <div className="facial-monitor-placeholder">{simulation ? <Radio size={24} /> : <Camera size={24} />}<small>{simulation ? 'SIMULATION FEED' : 'CAMERA PAUSED'}</small></div> : null}
+        {!active || simulation ? <div className="facial-monitor-placeholder">{simulation ? <Radio size={24} /> : <Camera size={24} />}<small>{simulation ? 'SIMULATION FEED' : 'CAMERA FEED PAUSED'}</small></div> : null}
         <i className="facial-crosshair" /><span className="facial-feed-label">USER FACING · {status.toUpperCase()}</span>
       </div>
       <div className="facial-monitor-controls">
         <div className="facial-monitor-score"><div><small>HIDDEN TENSION INDEX</small><strong>{score.toFixed(1)}<em>/10</em></strong></div><div className={`facial-status ${discrepancy ? 'warning' : 'nominal'}`}>{discrepancy ? <CircleAlert size={13} /> : <ShieldCheck size={13} />}{discrepancy ? 'Possible under-reporting' : 'Signal aligned'}</div></div>
         <div className="facial-monitor-metrics"><span><small>OCULAR / BROW</small><b>{score >= 6 ? 'ELEVATED' : 'CALIBRATED'}</b></span><span><small>JAW / LIP</small><b>{score >= 5 ? 'TENSE' : 'RELAXED'}</b></span></div>
         {error && <p className="facial-monitor-error">{error}</p>}
-        <div className="facial-monitor-actions">{active ? <button type="button" onClick={stop}><CameraOff size={13} /> Pause</button> : <button type="button" onClick={startCamera}><Camera size={13} /> Activate camera</button>}<button type="button" onClick={startSimulation}><RefreshCw size={13} /> Simulate</button></div>
-        {!active && status === 'Requesting camera' && <LoaderCircle className="facial-monitor-loader" size={14} />}
+        <div className="facial-monitor-actions">{active ? <button type="button" onClick={stop}><CameraOff size={13} /> Pause Feed</button> : <button type="button" onClick={startCamera}><Camera size={13} /> Enable Camera</button>}<button type="button" onClick={startSimulation}><RefreshCw size={13} /> Simulation Mode</button></div>
+        {!active && status === 'Requesting camera access' && <LoaderCircle className="facial-monitor-loader" size={14} />}
       </div>
     </div>
   </aside>

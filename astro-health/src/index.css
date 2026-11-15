@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif; color-scheme: dark; background: #070b12; font-synthesis: none; text-rendering: optimizeLegibility; }
+:root { font-family: 'Atkinson Hyperlegible', 'Segoe UI', sans-serif; color-scheme: dark; background: #141716; font-synthesis: none; text-rendering: optimizeLegibility; }
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
-#root, html, body { max-width: 100%; overflow-x: hidden; }
+body { margin: 0; min-width: 320px; background: #141716; color: #efece6; font-size: 16px; font-weight: 400; line-height: 1.6; }
+#root, html, body { max-width: 100%; overflow-x: hidden; background: #141716; }
 button, select { font: inherit; }
 button { cursor: pointer; }

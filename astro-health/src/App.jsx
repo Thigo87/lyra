@@ -5,6 +5,7 @@ import { MissionDashboard } from './components/MissionDashboard'
 import { MissionModules } from './components/MissionModules'
 import { LockScreen } from './components/LockScreen'
 import { MissionOverview } from './components/MissionOverview'
+import { CrewVitalsHistory } from './components/CrewVitalsHistory'
 import { EmergencyAlertBanner, TelemetryQueue } from './components/EmergencyDispatch'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { crew, fallbackDonkiPayload, missions } from './data/missionData'
@@ -40,6 +41,8 @@ function AppContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const mission = useMemo(() => missions.find((item) => item.id === missionId), [missionId])
   const selectedCrew = crew.find((item) => item.id === crewId)
+  const missionHour = Math.floor(missionSeconds / 3600) % 24
+  const circadianMode = missionHour >= 7 && missionHour < 19 ? 'theme-operational' : 'theme-decompression'
   const solarEvent = { active: stormSimulated, radiationRate: stormSimulated ? 420 : 80, addedDose: stormSimulated ? 8.4 : 0 }
   const gamification = {
     xp: readinessXp,
@@ -158,7 +161,7 @@ function AppContent() {
   if (emergencyAccess && !crewId) return <main className="emergency-standalone"><EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setEmergencyAccess(false)} /><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} /></main>
 
   return (
-    <main className={`sentinel-app transition-colors duration-500 ${module === 'female' ? 'theme-rose' : ''}`}>
+    <main className={`sentinel-app transition-colors duration-500 ${circadianMode} ${module === 'female' ? 'theme-rose' : ''}`}>
       <SentinelHeader
         mission={mission}
         missions={missions}
@@ -190,6 +193,8 @@ function AppContent() {
         <section className="sentinel-content">
           {module === 'dashboard' ? (
             <MissionDashboard mission={mission} crew={selectedCrew} selectedZone={selectedZone} setSelectedZone={setSelectedZone} onModule={setModule} solarEvent={solarEvent} gamification={gamification} opticalHeartRate={opticalHeartRate} onOpticalHeartRate={handleOpticalHeartRate} radiationDoseOffset={radiationDoseOffset} wristbandDose={wristbandDose} wristbandZone={wristbandZone} onWristbandSync={handleWristbandSync} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
+          ) : module === 'history' ? (
+            <div className="module-page"><button type="button" className="back-link" onClick={() => setModule('dashboard')}>← Crew Dashboard</button><CrewVitalsHistory /></div>
           ) : (
             <MissionModules module={module} crew={selectedCrew} mission={mission} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
           )}

@@ -1,36 +1,36 @@
 import model from '../data/astro_model.json'
 
 const protocols = {
-  'Estado Nominal / Estável': ['Confirm baseline', 'Acknowledge stable readings and continue the scheduled watch.', 10, 'CheckCircle2'],
-  'Síndrome Neurovestibular & SANS (Neuro-ocular)': ['Stabilize posture', 'Secure yourself and keep your head still while fixing your gaze on a stable reference.', 30, 'Anchor'],
-  'Intolerância Ortostática & Hipotensão': ['Lower safely', 'Sit or lie down, elevate the legs if safe, and avoid a rapid stand.', 30, 'ArrowDown'],
-  'Alerta Tromboembólico Venoso (VTE / Estase Jugular)': ['Stop exertion', 'Keep the affected limb or neck still and notify the medical officer immediately.', 30, 'ShieldAlert'],
-  'Infecção do Trato Urinário (ITU) / Desconforto Pélvico': ['Log symptoms', 'Record pain, urinary changes, fever, and cycle context in the medical log.', 30, 'ClipboardCheck'],
-  'Anemia Espacial & Fadiga Endócrina': ['Conserve energy', 'Stop strenuous activity, secure hydration, and move to a monitored rest position.', 60, 'Battery'],
-  'Exposição Aguda à Radiação Solar (Evento DONKI)': ['Move to shelter', 'Proceed calmly to the storm shelter and minimize exposure time.', 30, 'ShieldAlert'],
-  'Emergência Cardiorrespiratória Crítica': ['Call emergency', 'Use the emergency channel and summon the nearest trained crewmate now.', 10, 'Siren'],
+  'Nominal / Stable Condition': ['Confirm baseline', 'Acknowledge stable readings and continue the scheduled watch.', 10, 'CheckCircle2'],
+  'Spaceflight Neurovestibular & SANS Syndrome': ['Stabilize posture', 'Secure yourself and keep your head still while fixing your gaze on a stable reference.', 30, 'Anchor'],
+  'Orthostatic Intolerance & Hypotension': ['Lower safely', 'Sit or lie down, elevate the legs if safe, and avoid a rapid stand.', 30, 'ArrowDown'],
+  'Venous Thromboembolism Alert (VTE / Jugular Stasis)': ['Stop exertion', 'Keep the affected limb or neck still and notify the medical officer immediately.', 30, 'ShieldAlert'],
+  'Urinary Tract Infection (UTI) / Pelvic Discomfort': ['Log symptoms', 'Record pain, urinary changes, fever, and cycle context in the medical log.', 30, 'ClipboardCheck'],
+  'Spaceflight Anemia & Endocrine Fatigue': ['Conserve energy', 'Stop strenuous activity, secure hydration, and move to a monitored rest position.', 60, 'Battery'],
+  'Acute Solar Radiation Exposure (DONKI Event)': ['Move to shelter', 'Proceed calmly to the storm shelter and minimize exposure time.', 30, 'ShieldAlert'],
+  'Critical Cardiorespiratory Emergency': ['Call emergency', 'Use the emergency channel and summon the nearest trained crewmate now.', 10, 'Siren'],
 }
 
 const severityByLabel = {
-  'Estado Nominal / Estável': 'nominal',
-  'Síndrome Neurovestibular & SANS (Neuro-ocular)': 'warning',
-  'Intolerância Ortostática & Hipotensão': 'danger',
-  'Alerta Tromboembólico Venoso (VTE / Estase Jugular)': 'danger',
-  'Infecção do Trato Urinário (ITU) / Desconforto Pélvico': 'warning',
-  'Anemia Espacial & Fadiga Endócrina': 'warning',
-  'Exposição Aguda à Radiação Solar (Evento DONKI)': 'danger',
-  'Emergência Cardiorrespiratória Crítica': 'critical',
+  'Nominal / Stable Condition': 'nominal',
+  'Spaceflight Neurovestibular & SANS Syndrome': 'warning',
+  'Orthostatic Intolerance & Hypotension': 'danger',
+  'Venous Thromboembolism Alert (VTE / Jugular Stasis)': 'danger',
+  'Urinary Tract Infection (UTI) / Pelvic Discomfort': 'warning',
+  'Spaceflight Anemia & Endocrine Fatigue': 'warning',
+  'Acute Solar Radiation Exposure (DONKI Event)': 'danger',
+  'Critical Cardiorespiratory Emergency': 'critical',
 }
 
 const cueByLabel = {
-  'Estado Nominal / Estável': ['full', 'slow', '#10b981'],
-  'Síndrome Neurovestibular & SANS (Neuro-ocular)': ['head', 'medium', '#f59e0b'],
-  'Intolerância Ortostática & Hipotensão': ['limbs', 'fast', '#f97316'],
-  'Alerta Tromboembólico Venoso (VTE / Estase Jugular)': ['limbs', 'fast', '#fb7185'],
-  'Infecção do Trato Urinário (ITU) / Desconforto Pélvico': ['abdomen', 'medium', '#f59e0b'],
-  'Anemia Espacial & Fadiga Endócrina': ['full', 'medium', '#f59e0b'],
-  'Exposição Aguda à Radiação Solar (Evento DONKI)': ['full', 'medium', '#f97316'],
-  'Emergência Cardiorrespiratória Crítica': ['chest', 'fast', '#ef4444'],
+  'Nominal / Stable Condition': ['full', 'slow', '#10b981'],
+  'Spaceflight Neurovestibular & SANS Syndrome': ['head', 'medium', '#f59e0b'],
+  'Orthostatic Intolerance & Hypotension': ['limbs', 'fast', '#f97316'],
+  'Venous Thromboembolism Alert (VTE / Jugular Stasis)': ['limbs', 'fast', '#fb7185'],
+  'Urinary Tract Infection (UTI) / Pelvic Discomfort': ['abdomen', 'medium', '#f59e0b'],
+  'Spaceflight Anemia & Endocrine Fatigue': ['full', 'medium', '#f59e0b'],
+  'Acute Solar Radiation Exposure (DONKI Event)': ['full', 'medium', '#f97316'],
+  'Critical Cardiorespiratory Emergency': ['chest', 'fast', '#ef4444'],
 }
 
 function softmax(values) {
@@ -53,29 +53,54 @@ export function runDiagnostic(featuresArray) {
   })
   const hidden = model.b1.map((bias, index) => Math.max(0, normalized.reduce((sum, value, featureIndex) => sum + value * model.w1[featureIndex][index], bias)))
   const probabilities = softmax(model.b2.map((bias, index) => hidden.reduce((sum, value, hiddenIndex) => sum + value * model.w2[hiddenIndex][index], bias)))
-  const ranked = probabilities.map((probability, index) => ({ label: model.labels[index], percentage: Number((probability * 100).toFixed(1)) })).sort((a, b) => b.percentage - a.percentage)
+  const facialStressScore = featuresArray[12]
+  const declaredSymptomAverage = featuresArray.slice(0, 6).reduce((sum, value) => sum + value, 0) / 6
+  const incongruenceDetected = facialStressScore >= 6.5 && declaredSymptomAverage <= 3
+  const refinedProbabilities = [...probabilities]
+  if (incongruenceDetected) {
+    const nominalIndex = model.labels.indexOf('Nominal / Stable Condition')
+    const clinicalCandidate = probabilities.reduce((bestIndex, probability, index) => (
+      index !== nominalIndex && probability > probabilities[bestIndex] ? index : bestIndex
+    ), nominalIndex === 0 ? 1 : 0)
+    refinedProbabilities[nominalIndex] *= 0.25
+    refinedProbabilities[clinicalCandidate] *= 1.15
+    const total = refinedProbabilities.reduce((sum, probability) => sum + probability, 0)
+    for (let index = 0; index < refinedProbabilities.length; index += 1) refinedProbabilities[index] /= total
+  }
+  const ranked = refinedProbabilities.map((probability, index) => ({ label: model.labels[index], percentage: Number((probability * 100).toFixed(1)) })).sort((a, b) => b.percentage - a.percentage)
   const winner = ranked[0]
   const [highlightZone, pulseSpeed, statusColor] = cueByLabel[winner.label]
   const protocol = protocols[winner.label]
-  const facialStress = featuresArray[12]
-  const declaredStress = (featuresArray[0] + featuresArray[1] + featuresArray[2] + featuresArray[3] + featuresArray[4] + featuresArray[5]) / 6
-  const facialWarning = facialStress >= 6 && declaredStress <= 3
+  const facialTelemetryNote = incongruenceDetected
+    ? `Facial micro-expression tension (${facialStressScore.toFixed(1)}/10) contradicts low self-reported symptom scores — potential symptom underreporting flagged by neural refinement.`
+    : ''
+  const baseActionSteps = Array.from({ length: 4 }, (_, index) => {
+    const [title, instruction, durationSeconds, iconName] = index === 0 ? protocol : [
+      ['Monitor telemetry', 'Keep the Bio-Band active and watch for worsening readings.', 30, 'Activity'],
+      ['Report to crew', 'Transmit the symptom summary and current vital signs to mission control.', 30, 'Radio'],
+      ['Reassess safely', 'Repeat the focused check before resuming movement or mission tasks.', 60, 'ScanLine'],
+    ][index - 1]
+    return { stepNumber: index + 1, title, instruction, durationSeconds, iconName }
+  })
+  const actionSteps = incongruenceDetected
+    ? [
+      { stepNumber: 1, title: 'Verify objective vitals', instruction: 'Verify objective vital signs before clearing the crewmate for mission activities.', durationSeconds: 60, iconName: 'Activity' },
+      ...baseActionSteps.map((step) => ({ ...step, stepNumber: step.stepNumber + 1 })),
+    ]
+    : baseActionSteps
 
   return {
     diagnosis: { label: winner.label, confidence: winner.percentage, severity: severityByLabel[winner.label] },
     probabilities: ranked,
     avatarCue: { highlightZone, pulseSpeed, statusColor },
-    facialWarning,
-    justification: facialWarning
-      ? `Facial telemetry detected elevated ocular, brow, or jaw tension (${facialStress.toFixed(1)}/10) despite low declared symptom intensity.`
-      : `Facial telemetry is consistent with the declared symptom profile (${facialStress.toFixed(1)}/10).`,
-    actionSteps: Array.from({ length: 4 }, (_, index) => {
-      const [title, instruction, durationSeconds, iconName] = index === 0 ? protocol : [
-        ['Monitor telemetry', 'Keep the Bio-Band active and watch for worsening readings.', 30, 'Activity'],
-        ['Report to crew', 'Transmit the symptom summary and current vital signs to mission control.', 30, 'Radio'],
-        ['Reassess safely', 'Repeat the focused check before resuming movement or mission tasks.', 60, 'ScanLine'],
-      ][index - 1]
-      return { stepNumber: index + 1, title, instruction, durationSeconds, iconName }
-    }),
+    facialStressScore,
+    declaredSymptomAverage,
+    incongruenceDetected,
+    facialWarning: incongruenceDetected,
+    facialTelemetryNote,
+    justification: incongruenceDetected
+      ? facialTelemetryNote
+      : `Facial telemetry is consistent with the declared symptom profile (${facialStressScore.toFixed(1)}/10).`,
+    actionSteps,
   }
 }
