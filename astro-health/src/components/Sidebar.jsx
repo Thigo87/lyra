@@ -7,9 +7,9 @@ const modules = [
   { id: 'cognitive', label: 'Prontidão cognitiva', icon: Brain },
 ]
 
-export function Sidebar({ activeCrew, module, setModule, mission, onLock, gamification, onAward }) {
+export function Sidebar({ activeCrew, module, setModule, mission, onLock, gamification, onAward, mobileMenuOpen }) {
   const modulesForCrew = activeCrew.id === 'elena' ? modules : modules.filter((item) => item.id !== 'female')
-  return <aside className="sentinel-sidebar">
+  return <aside className={`sentinel-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
     <div className="sidebar-crew">
       <p className="sidebar-label">TRIPULANTE AUTENTICADO</p>
       <div className="crew-profile-button locked"><span className="crew-avatar">{activeCrew.name.slice(-1)}</span><span><strong>{activeCrew.name}</strong><small>{activeCrew.role} · {activeCrew.age} anos · Perfil {activeCrew.profile}</small></span><LockKeyhole size={14} /></div>
