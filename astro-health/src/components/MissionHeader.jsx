@@ -45,7 +45,7 @@ export function MissionHeader({ missions, missionId, setMissionId, crew, crewId,
         <div className="flex items-center gap-3">
           <div className="brand-mark"><Orbit size={23} strokeWidth={1.5} /></div>
           <div>
-            <p className="font-display text-sm font-bold tracking-[0.2em] text-white">SENTINEL // HEALTH</p>
+            <p className="font-display text-sm font-bold tracking-[0.2em] text-white">LYRA // HEALTH</p>
             <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Aerospace Medical Operations</p>
           </div>
         </div>

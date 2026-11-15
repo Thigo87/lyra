@@ -4,6 +4,7 @@ import { Sidebar } from './components/Sidebar'
 import { MissionDashboard } from './components/MissionDashboard'
 import { MissionModules } from './components/MissionModules'
 import { LockScreen } from './components/LockScreen'
+import { MissionOverview } from './components/MissionOverview'
 import { EmergencyAlertBanner, TelemetryQueue } from './components/EmergencyDispatch'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { crew, fallbackDonkiPayload, missions } from './data/missionData'
@@ -12,6 +13,7 @@ import './App.css'
 function AppContent() {
   const [missionId, setMissionId] = useState('transit')
   const [crewId, setCrewId] = useState(null)
+  const [activeView, setActiveView] = useState('overview')
   const [emergencyAccess, setEmergencyAccess] = useState(false)
   const [module, setModule] = useState('dashboard')
   const [selectedZone, setSelectedZone] = useState(null)
@@ -24,10 +26,10 @@ function AppContent() {
   const [completedQuests, setCompletedQuests] = useState([])
   const [achievement, setAchievement] = useState(null)
   const [notifications, setNotifications] = useState(() => {
-    try { return JSON.parse(window.localStorage.getItem('sentinela-notifications') || '[]') } catch { return [] }
+    try { return JSON.parse(window.localStorage.getItem('lyra-notifications') || '[]') } catch { return [] }
   })
   const [activeAlert, setActiveAlert] = useState(() => {
-    try { return JSON.parse(window.localStorage.getItem('sentinela-active-alert') || 'null') } catch { return null }
+    try { return JSON.parse(window.localStorage.getItem('lyra-active-alert') || 'null') } catch { return null }
   })
   const [telemetryPacket, setTelemetryPacket] = useState(null)
   const [opticalHeartRate, setOpticalHeartRate] = useState(null)
@@ -63,10 +65,10 @@ function AppContent() {
     return () => { window.clearTimeout(timeout); controller.abort() }
   }, [])
 
-  useEffect(() => { window.localStorage.setItem('sentinela-notifications', JSON.stringify(notifications)) }, [notifications])
+  useEffect(() => { window.localStorage.setItem('lyra-notifications', JSON.stringify(notifications)) }, [notifications])
   useEffect(() => {
-    if (activeAlert) window.localStorage.setItem('sentinela-active-alert', JSON.stringify(activeAlert))
-    else window.localStorage.removeItem('sentinela-active-alert')
+    if (activeAlert) window.localStorage.setItem('lyra-active-alert', JSON.stringify(activeAlert))
+    else window.localStorage.removeItem('lyra-active-alert')
   }, [activeAlert])
 
   const playAlertTone = () => {
@@ -86,7 +88,7 @@ function AppContent() {
 
   const notifyNative = (title, body) => {
     if (!('Notification' in window)) return
-    const send = () => new Notification(title, { body, tag: 'sentinela-emergency' })
+    const send = () => new Notification(title, { body, tag: 'lyra-emergency' })
     if (Notification.permission === 'granted') send()
     else if (Notification.permission !== 'denied') Notification.requestPermission().then((permission) => { if (permission === 'granted') send() })
   }
@@ -103,9 +105,9 @@ function AppContent() {
     }
     setActiveAlert(alert)
     setNotifications((items) => [alert, ...items].slice(0, 20))
-    setTelemetryPacket({ event: 'SENTINELA_EMERGENCY', alert, mission: mission.name, sentAt: new Date().toISOString() })
+    setTelemetryPacket({ event: 'LYRA_EMERGENCY', alert, mission: mission.name, sentAt: new Date().toISOString() })
     playAlertTone()
-    notifyNative(`SENTINELA · ${source}`, `${alert.crewName} | ${detail}`)
+    notifyNative(`LYRA · ${source}`, `${alert.crewName} | ${detail}`)
   }
 
   const acknowledgeAlert = (id) => {
@@ -121,7 +123,7 @@ function AppContent() {
   }
 
   const emergency = () => setModule('emergency')
-  const lockTerminal = () => { setCrewId(null); setEmergencyAccess(false); setModule('dashboard') }
+  const lockTerminal = () => { setCrewId(null); setEmergencyAccess(false); setModule('dashboard'); setActiveView('overview') }
   const awardXp = (questId, amount, title) => {
     if (completedQuests.includes(questId)) return
     setCompletedQuests((quests) => [...quests, questId])
@@ -146,12 +148,17 @@ function AppContent() {
     awardXp(`bioband-sync-${Date.now()}`, 40, 'Bio-Band NFC Dose Sync')
   }
 
-  if (!crewId && !emergencyAccess) return <LockScreen crew={crew} onLogin={(id) => setCrewId(id)} onEmergency={() => setEmergencyAccess(true)} />
+  if (!crewId && !emergencyAccess && activeView === 'overview') return <MissionOverview mission={mission} missions={missions} missionId={missionId} setMissionId={setMissionId} missionSeconds={missionSeconds} donkiStatus={donkiStatus} solarEvent={solarEvent} gamification={gamification} crew={crew} onUnlock={(id) => { setCrewId(null); setActiveView(`lock:${id}`) }} onEmergency={() => setEmergencyAccess(true)} />
+
+  if (!crewId && !emergencyAccess) {
+    const initialCrewId = activeView.startsWith('lock:') ? activeView.slice(5) : null
+    return <LockScreen crew={crew} initialCrewId={initialCrewId} onLogin={(id) => { setCrewId(id); setActiveView('workspace') }} onBack={() => setActiveView('overview')} onEmergency={() => setEmergencyAccess(true)} />
+  }
 
   if (emergencyAccess && !crewId) return <main className="emergency-standalone"><EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setEmergencyAccess(false)} /><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} /></main>
 
   return (
-    <main className="sentinel-app">
+    <main className={`sentinel-app transition-colors duration-500 ${module === 'female' ? 'theme-rose' : ''}`}>
       <SentinelHeader
         mission={mission}
         missions={missions}

@@ -1,15 +1,7 @@
-import { Bluetooth, ChevronDown, Clock3, Globe2, Menu, Radio, ShieldAlert, Sun, Waves, X } from 'lucide-react'
+import { Bluetooth, Clock3, Globe2, Menu, Radio, ShieldAlert, Sun, Waves, X } from 'lucide-react'
 import { useState } from 'react'
 import { NotificationCenter } from './EmergencyDispatch'
-
-function Dropdown({ value, options, onChange }) {
-  const [open, setOpen] = useState(false)
-  const selected = options.find((option) => option.id === value)
-  return <div className="sentinel-dropdown">
-    <button type="button" className="sentinel-dropdown-trigger" onClick={() => setOpen((state) => !state)}><span><small>MISSION ENVIRONMENT</small><strong>{selected.name}</strong></span><ChevronDown size={16} /></button>
-    {open && <div className="sentinel-dropdown-menu">{options.map((option) => <button type="button" key={option.id} className={option.id === value ? 'active' : ''} onClick={() => { onChange(option.id); setOpen(false) }}><span><b>{option.name}</b><small>{option.context}</small></span><em>{option.gravity} · {option.latency}</em></button>)}</div>}
-  </div>
-}
+import { MissionEnvironmentDropdown } from './MissionEnvironmentDropdown'
 
 function formatMissionTime(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600) % 24
@@ -37,11 +29,11 @@ export function SentinelHeader({ mission, missions, missionId, setMissionId, mis
   return <header className="sentinel-header">
     <div className="sentinel-header-main">
       <div className="header-primary">
-        <div className="header-identity"><button type="button" className="mobile-menu-button" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} onClick={onMenuToggle}>{mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}</button><div className="sentinel-brand"><div className="sentinel-logo"><Globe2 size={22} /></div><div><h1>SENTINEL</h1><p>Autonomous Health Monitor</p></div></div></div>
+        <div className="header-identity"><button type="button" className="mobile-menu-button" aria-label={mobileMenuOpen ? 'Close navigation' : 'Open navigation'} onClick={onMenuToggle}>{mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}</button><div className="sentinel-brand"><div className="sentinel-logo"><Globe2 size={22} /></div><div><h1>LYRA</h1><p>Autonomous Crew & Women's Health</p></div></div></div>
         <div className="header-actions"><div className="header-crew-status"><span className="header-crew-badge">{activeCrew?.name || 'Crew'}</span><button type="button" className="wristband-status-pill" onClick={() => setWristbandOpen((open) => !open)}><span className="wristband-pulse-dot" /><Bluetooth size={13} /> Bio-Band · Synced (BLE)</button>{wristbandOpen && <div className="wristband-popover"><div className="wristband-popover-heading"><div><p className="eyebrow"><Waves size={13} /> WRISTBAND TELEMETRY & SYNC</p><strong>{activeCrew?.name || 'Crew'} · passive dosimeter</strong></div><button type="button" className="optical-close" onClick={() => setWristbandOpen(false)}><X size={15} /></button></div><p className="wristband-copy">Co-located absorption is cross-referenced with the active habitat beacon.</p><div className="wristband-zone-toggle"><button type="button" className={wristbandZone === 'shelter' ? 'active' : ''} onClick={() => setWristbandZone('shelter')}>Storm Shelter / Water Wall<br /><small>0.05 mSv/h</small></button><button type="button" className={wristbandZone === 'airlock' ? 'active' : ''} onClick={() => setWristbandZone('airlock')}>Unshielded Airlock / EVA<br /><small>2.40 mSv/h</small></button></div><div className="wristband-zone-readout"><span><b>BLE beacon</b>{zone.module}</span><span><b>Zone rate</b>{zone.rate}</span></div><button type="button" className="female-action" onClick={syncWristband} disabled={wristbandSyncing}>{wristbandSyncing ? 'NFC / BLE wave in progress…' : 'Tap Wristband to Sync (NFC)'}</button>{wristbandSyncing && <div className="wristband-wave-animation"><i /><i /><i /></div>}{wristbandSynced && <div className="wristband-sync-result">Latest reading {zone.dose} · {zone.module}</div>}</div>}</div><NotificationCenter notifications={notifications} activeCount={activeAlertCount} onAcknowledge={onAcknowledge} onManualAlert={onManualAlert} /><button type="button" className="emergency-button" onClick={onEmergency}><ShieldAlert size={18} /><span>Medical emergency<br />on board</span></button></div>
       </div>
       <div className="header-telemetry">
-        <div className="sentinel-mission-controls"><Dropdown value={missionId} options={missions} onChange={setMissionId} /></div>
+        <div className="sentinel-mission-controls"><MissionEnvironmentDropdown value={missionId} options={missions} onChange={setMissionId} /></div>
         <div className="telemetry-badges">
           <span><b>GRAVITY</b><strong>{mission.gravity}</strong></span><span><b>EARTH LATENCY</b><strong>{mission.latency}</strong></span><span className={`telemetry-${solarEvent.active ? 'critical' : mission.radiationLevel}`}><b>RADIATION</b><strong>{mission.radiation} · {solarEvent.radiationRate} µSv/h</strong></span><span><b>DAY 96 · MET</b><strong><Clock3 size={12} />{formatMissionTime(missionSeconds)}</strong></span>
         </div>
