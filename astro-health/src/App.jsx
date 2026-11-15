@@ -14,7 +14,7 @@ function AppContent() {
   const [crewId, setCrewId] = useState(null)
   const [emergencyAccess, setEmergencyAccess] = useState(false)
   const [module, setModule] = useState('dashboard')
-  const [selectedZone, setSelectedZone] = useState('chest')
+  const [selectedZone, setSelectedZone] = useState(null)
   const [missionSeconds, setMissionSeconds] = useState(96 * 86400 + 12 * 3600 + 34 * 60 + 18)
   const [donkiStatus, setDonkiStatus] = useState('Querying NASA DONKI feed…')
   const [donkiPayload, setDonkiPayload] = useState(fallbackDonkiPayload)

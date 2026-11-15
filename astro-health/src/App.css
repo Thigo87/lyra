@@ -319,6 +319,35 @@
   .telemetry-badges span { padding: 7px 9px; }
 }
 
+/* Holographic anatomical scanner */
+.holographic-scanner { min-height: 580px; border: 1px solid #164e63; background: #040b14; box-shadow: inset 0 0 35px #061923, 0 0 20px #06b6d41c; }
+.holographic-scanner .telemetry-grid { opacity: .3; }
+.body-chart-host { width: 260px; height: 520px; }
+.holographic-body-model { width: 260px; height: 520px; overflow: visible; filter: drop-shadow(0 0 4px #06b6d4); }
+.holographic-body-gap { fill: #083344; stroke: #020617; stroke-width: 4; vector-effect: non-scaling-stroke; pointer-events: none; }
+.holographic-body-contour, .holographic-body-segment { cursor: pointer; stroke: #38bdf8; stroke-width: 1.4; vector-effect: non-scaling-stroke; transition: fill .2s ease, stroke .2s ease, filter .2s ease; }
+.holographic-body-contour { fill-rule: evenodd; filter: drop-shadow(0 0 2px #06b6d4); }
+.holographic-body-detail { fill: none; stroke: #67e8f9; stroke-width: .8; opacity: .62; pointer-events: none; }
+.holographic-body-segment:hover, .holographic-body-contour:hover { stroke: #fbbf24; filter: drop-shadow(0 0 4px #fbbf24); }
+.svg-hotspot { cursor: pointer; outline: none; }.svg-hotspot-target { fill: #041522aa; stroke: #38bdf8; stroke-width: 1; stroke-dasharray: 2 2; }.svg-hotspot-core { fill: #38bdf8; }.svg-hotspot-line { stroke: #38bdf899; stroke-width: .8; stroke-dasharray: 3 2; }.svg-hotspot-label { fill: #67e8f9; font: 7px 'DM Mono'; letter-spacing: .1em; }.svg-hotspot.active .svg-hotspot-target { fill: #10b98155; stroke: #10b981; filter: drop-shadow(0 0 4px #10b981); }.svg-hotspot.active .svg-hotspot-core { fill: #fbbf24; }.svg-hotspot.active .svg-hotspot-line, .svg-hotspot.active .svg-hotspot-label { stroke: #fbbf24; fill: #fbbf24; }
+.scanner-topbar, .scanner-bottombar { position: absolute; z-index: 4; left: 18px; right: 18px; display: flex; justify-content: space-between; color: #67e8f9; font: 8px 'DM Mono', monospace; letter-spacing: .14em; }
+.scanner-topbar { top: 14px; }.scanner-bottombar { bottom: 14px; color: #5daea7; }
+.scanner-topbar span:first-child { color: #a7f3d0; }.scanner-topbar span:first-child::first-letter { color: #10b981; }
+.scanner-bracket { position: absolute; z-index: 4; width: 22px; height: 22px; border-color: #38bdf8; opacity: .8; }
+.bracket-tl { top: 42px; left: 18px; border-top: 1px solid; border-left: 1px solid; }.bracket-tr { top: 42px; right: 18px; border-top: 1px solid; border-right: 1px solid; }.bracket-bl { bottom: 40px; left: 18px; border-bottom: 1px solid; border-left: 1px solid; }.bracket-br { right: 18px; bottom: 40px; border-right: 1px solid; border-bottom: 1px solid; }
+.scanner-scale { position: absolute; z-index: 3; top: 55px; bottom: 50px; left: 30px; width: 24px; border-left: 1px solid #38bdf866; }
+.scanner-scale i { position: absolute; left: 0; width: 9px; border-top: 1px solid #38bdf8; }.scanner-scale b { position: absolute; top: -5px; left: -22px; color: #5daea7; font: 7px 'DM Mono'; font-weight: 400; }
+.scan-line { z-index: 5; height: 18px; background: linear-gradient(180deg, transparent, #38bdf866 45%, #38bdf8 50%, #38bdf822 56%, transparent); box-shadow: 0 0 14px #38bdf8; pointer-events: none; }
+.scan-line span { position: absolute; right: 10px; top: 7px; color: #67e8f9; font: 7px 'DM Mono'; letter-spacing: .14em; }.scan-line.paused { animation-play-state: paused; opacity: .35; }
+.scanner-hotspots { position: absolute; z-index: 6; inset: 0; pointer-events: none; }
+.scanner-hotspot { position: absolute; display: flex; width: 108px; align-items: center; gap: 7px; transform: translate(-50%, -50%); color: #67e8f9; pointer-events: auto; text-align: left; }
+.scanner-hotspot:nth-child(odd) { flex-direction: row-reverse; text-align: right; }
+.scanner-hotspot::before { position: absolute; top: 50%; width: 70px; border-top: 1px dashed #38bdf899; content: ''; }.scanner-hotspot:nth-child(odd)::before { right: 100%; }.scanner-hotspot:nth-child(even)::before { left: 100%; }
+.hotspot-target { display: block; width: 15px; height: 15px; flex: 0 0 auto; border: 1px dashed #38bdf8; border-radius: 50%; box-shadow: 0 0 8px #06b6d455; }.hotspot-target::after { display: block; width: 4px; height: 4px; margin: 4px; border-radius: 50%; background: #38bdf8; content: ''; }
+.scanner-hotspot i { color: #67e8f9; font: 7px 'DM Mono'; font-style: normal; letter-spacing: .1em; white-space: nowrap; }.scanner-hotspot.active .hotspot-target { border-color: #10b981; box-shadow: 0 0 12px #10b981; }.scanner-hotspot.active .hotspot-target::after { background: #fbbf24; }.scanner-hotspot.active i { color: #fbbf24; }
+.scanner-controlbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid #1d2b3c; background: #081522; padding: 10px 20px; color: #7dd3fc; font: 9px 'DM Mono'; }.scanner-controlbar span { display: flex; align-items: center; gap: 7px; }.scanner-controlbar button { border: 1px solid #28645e; border-radius: 4px; background: #102b32; padding: 6px 12px; color: #8de8ca; font: inherit; }.scanner-controlbar button:hover { border-color: #38bdf8; color: #fff; }
+@media (max-width: 639px) { .holographic-scanner { min-height: 500px; }.body-chart-host, .holographic-body-model { width: 220px; height: 440px; }.scanner-scale { left: 22px; }.scanner-topbar, .scanner-bottombar { left: 12px; right: 12px; font-size: 7px; } }
+
 .female-protocol-selector, .female-card { border: 1px solid #28485a; border-radius: 9px; background: #0b1724; padding: 17px; }
 .female-protocol-selector { margin-bottom: 12px; }
 .female-protocol-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 11px; }

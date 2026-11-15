@@ -10,7 +10,7 @@ const zoneDetails = {
 }
 
 export function MissionDashboard({ mission, crew, selectedZone, setSelectedZone, onModule, solarEvent, gamification, opticalHeartRate, onOpticalHeartRate, radiationDoseOffset, wristbandDose, wristbandZone, onWristbandSync, onRadiationSync, onRadiationBurst }) {
-  const detail = zoneDetails[selectedZone]
+  const detail = zoneDetails[selectedZone] || zoneDetails.head
   return <div className="dashboard-page">
     <div className="crew-heading"><div><p className="breadcrumb">{mission.name} · {mission.context} <ChevronRight size={13} /> Day 96</p><h2>{crew.name}</h2><p>{crew.id === 'elena' ? <button type="button" onClick={() => onModule('female')} className="inline-link">Menstrual suppression</button> : 'Nominal physiological profile'} · {crew.role} · {crew.age} years</p></div><div className="crew-state-actions"><span className={`state-badge ${solarEvent.active ? 'attention' : ''}`}><span /> Overall status: {solarEvent.active || mission.radiationLevel === 'critical' ? 'Caution' : 'Nominal'}</span>{solarEvent.active && <button type="button" className="preventive-button" onClick={() => onModule('female')}>Open preventive protocol</button>}</div></div>
     <div className="dashboard-readiness"><div><Trophy size={16} /><span>Level {gamification.level} · Biomedical Specialist</span><i><em style={{ width: `${gamification.progress}%` }} /></i></div><strong>{gamification.streak}-day streak</strong></div>
