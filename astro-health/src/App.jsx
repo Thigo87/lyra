@@ -5,17 +5,18 @@ import { MissionDashboard } from './components/MissionDashboard'
 import { MissionModules } from './components/MissionModules'
 import { LockScreen } from './components/LockScreen'
 import { EmergencyAlertBanner, TelemetryQueue } from './components/EmergencyDispatch'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { crew, fallbackDonkiPayload, missions } from './data/missionData'
 import './App.css'
 
-function App() {
+function AppContent() {
   const [missionId, setMissionId] = useState('transit')
   const [crewId, setCrewId] = useState(null)
   const [emergencyAccess, setEmergencyAccess] = useState(false)
   const [module, setModule] = useState('dashboard')
   const [selectedZone, setSelectedZone] = useState('chest')
   const [missionSeconds, setMissionSeconds] = useState(96 * 86400 + 12 * 3600 + 34 * 60 + 18)
-  const [donkiStatus, setDonkiStatus] = useState('Consultando feed NASA DONKI…')
+  const [donkiStatus, setDonkiStatus] = useState('Querying NASA DONKI feed…')
   const [donkiPayload, setDonkiPayload] = useState(fallbackDonkiPayload)
   const [donkiPayloadOpen, setDonkiPayloadOpen] = useState(false)
   const [stormSimulated, setStormSimulated] = useState(false)
@@ -29,6 +30,11 @@ function App() {
     try { return JSON.parse(window.localStorage.getItem('sentinela-active-alert') || 'null') } catch { return null }
   })
   const [telemetryPacket, setTelemetryPacket] = useState(null)
+  const [opticalHeartRate, setOpticalHeartRate] = useState(null)
+  const [opticalSnapshot, setOpticalSnapshot] = useState(null)
+  const [radiationDoseOffset, setRadiationDoseOffset] = useState(0)
+  const [wristbandZone, setWristbandZone] = useState('shelter')
+  const [wristbandDose, setWristbandDose] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const mission = useMemo(() => missions.find((item) => item.id === missionId), [missionId])
   const selectedCrew = crew.find((item) => item.id === crewId)
@@ -50,9 +56,9 @@ function App() {
     const controller = new AbortController()
     const timeout = window.setTimeout(() => controller.abort(), 3000)
     fetch('https://api.nasa.gov/DONKI/SEP?api_key=DEMO_KEY', { signal: controller.signal })
-      .then((response) => { if (!response.ok) throw new Error('DONKI indisponível'); return response.json() })
-      .then((payload) => { setDonkiPayload(payload); setDonkiStatus('Feed NASA DONKI ativo') })
-      .catch(() => setDonkiStatus('Feed NASA DONKI ativo · payload histórico offline'))
+      .then((response) => { if (!response.ok) throw new Error('DONKI unavailable'); return response.json() })
+      .then((payload) => { setDonkiPayload(payload); setDonkiStatus('NASA DONKI Feed Active') })
+      .catch(() => setDonkiStatus('NASA DONKI Feed Active · historical payload offline'))
       .finally(() => window.clearTimeout(timeout))
     return () => { window.clearTimeout(timeout); controller.abort() }
   }, [])
@@ -85,14 +91,15 @@ function App() {
     else if (Notification.permission !== 'denied') Notification.requestPermission().then((permission) => { if (permission === 'granted') send() })
   }
 
-  const dispatchAlert = (detail, source = 'Protocolo de emergência') => {
+  const dispatchAlert = (detail, source = 'Emergency protocol') => {
     const alert = {
       id: `${Date.now()}-${source}`,
       title: source,
       detail,
-      crewName: selectedCrew?.name || 'Tripulação',
+      crewName: selectedCrew?.name || 'Crew',
       met: formatMet(missionSeconds),
-      status: 'Ativo',
+      status: 'Active',
+      opticalSnapshot,
     }
     setActiveAlert(alert)
     setNotifications((items) => [alert, ...items].slice(0, 20))
@@ -102,13 +109,13 @@ function App() {
   }
 
   const acknowledgeAlert = (id) => {
-    setNotifications((items) => items.map((item) => item.id === id ? { ...item, status: 'Reconhecido' } : item))
-    setActiveAlert((alert) => alert?.id === id ? { ...alert, status: 'Reconhecido' } : alert)
+    setNotifications((items) => items.map((item) => item.id === id ? { ...item, status: 'Acknowledged' } : item))
+    setActiveAlert((alert) => alert?.id === id ? { ...alert, status: 'Acknowledged' } : alert)
   }
 
   const handleStorm = () => {
     setStormSimulated((value) => {
-      if (!value) window.setTimeout(() => dispatchAlert('Tempestade solar SEP detectada · Abrigo preventivo recomendado', 'Alerta NASA DONKI / SEP'), 0)
+      if (!value) window.setTimeout(() => dispatchAlert('SEP solar event detected · Preventive shelter recommended', 'NASA DONKI / SEP Alert'), 0)
       return !value
     })
   }
@@ -122,10 +129,26 @@ function App() {
     setAchievement({ title, amount })
     window.setTimeout(() => setAchievement(null), 4200)
   }
+  const handleOpticalHeartRate = (value) => {
+    setOpticalHeartRate(value)
+    awardXp('optical-heart-rate', 60, 'Optical Heart Rate Telemetry Updated')
+  }
+  const handleRadiationSync = ({ doseRate }) => {
+    setRadiationDoseOffset((dose) => dose + Math.max(0.1, doseRate / 60))
+    awardXp('cmos-radiation-dosimeter', 70, 'CMOS Radiation Dosimeter Sync')
+  }
+  const handleRadiationBurst = (active) => {
+    if (active) dispatchAlert('CMOS sensor detected a simulated cosmic-ray / SEP burst · move to radiation shelter', 'Radiation Shelter Alert')
+  }
+  const handleWristbandSync = () => {
+    const incrementalDose = wristbandZone === 'airlock' ? 0.38 : 0.08
+    setWristbandDose((dose) => dose + incrementalDose)
+    awardXp(`bioband-sync-${Date.now()}`, 40, 'Bio-Band NFC Dose Sync')
+  }
 
   if (!crewId && !emergencyAccess) return <LockScreen crew={crew} onLogin={(id) => setCrewId(id)} onEmergency={() => setEmergencyAccess(true)} />
 
-  if (emergencyAccess && !crewId) return <main className="emergency-standalone"><EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setEmergencyAccess(false)} /><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} /></main>
+  if (emergencyAccess && !crewId) return <main className="emergency-standalone"><EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setEmergencyAccess(false)} /><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} /></main>
 
   return (
     <main className="sentinel-app">
@@ -139,31 +162,35 @@ function App() {
         mobileMenuOpen={mobileMenuOpen}
         onMenuToggle={() => setMobileMenuOpen((value) => !value)}
         notifications={notifications}
-        activeAlertCount={notifications.filter((item) => item.status === 'Ativo').length}
+        activeAlertCount={notifications.filter((item) => item.status === 'Active').length}
         onAcknowledge={acknowledgeAlert}
-        onManualAlert={() => dispatchAlert('Alerta geral acionado manualmente pela tripulação', 'Alerta Geral')}
-        donkiStatus={stormSimulated ? 'Alerta SEP simulado · protocolo ativo' : donkiStatus}
+        onManualAlert={() => dispatchAlert('General alert manually activated by crew', 'General Alert')}
+        donkiStatus={stormSimulated ? 'Simulated SEP alert · protocol active' : donkiStatus}
         onSimulateStorm={handleStorm}
         stormSimulated={stormSimulated}
         solarEvent={solarEvent}
         donkiPayload={donkiPayload}
         donkiPayloadOpen={donkiPayloadOpen}
         setDonkiPayloadOpen={setDonkiPayloadOpen}
+        activeCrew={selectedCrew}
+        wristbandZone={wristbandZone}
+        setWristbandZone={setWristbandZone}
+        onWristbandSync={handleWristbandSync}
       />
       <div className="sentinel-body">
-        {mobileMenuOpen && <button type="button" className="mobile-drawer-backdrop" aria-label="Fechar menu" onClick={() => setMobileMenuOpen(false)} />}
+        {mobileMenuOpen && <button type="button" className="mobile-drawer-backdrop" aria-label="Close menu" onClick={() => setMobileMenuOpen(false)} />}
         <Sidebar activeCrew={selectedCrew} module={module} setModule={(nextModule) => { setModule(nextModule); setMobileMenuOpen(false) }} mission={mission} onLock={lockTerminal} gamification={gamification} onAward={awardXp} mobileMenuOpen={mobileMenuOpen} />
         <section className="sentinel-content">
           {module === 'dashboard' ? (
-            <MissionDashboard mission={mission} crew={selectedCrew} selectedZone={selectedZone} setSelectedZone={setSelectedZone} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} />
+            <MissionDashboard mission={mission} crew={selectedCrew} selectedZone={selectedZone} setSelectedZone={setSelectedZone} onModule={setModule} solarEvent={solarEvent} gamification={gamification} opticalHeartRate={opticalHeartRate} onOpticalHeartRate={handleOpticalHeartRate} radiationDoseOffset={radiationDoseOffset} wristbandDose={wristbandDose} wristbandZone={wristbandZone} onWristbandSync={handleWristbandSync} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
           ) : (
-            <MissionModules module={module} crew={selectedCrew} mission={mission} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} />
+            <MissionModules module={module} crew={selectedCrew} mission={mission} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
           )}
         </section>
       </div>
       <EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setModule('emergency')} />
       <TelemetryQueue key={telemetryPacket?.alert?.id || 'empty'} packet={telemetryPacket} mission={mission} onDismiss={() => setTelemetryPacket(null)} />
-      {achievement && <div className="achievement-toast"><span className="achievement-medal">★</span><div><p>CONQUISTA DESBLOQUEADA</p><strong>{achievement.title}</strong><small>+{achievement.amount} XP de Prontidão Médica</small></div></div>}
+      {achievement && <div className="achievement-toast"><span className="achievement-medal">★</span><div><p>ACHIEVEMENT UNLOCKED</p><strong>{achievement.title}</strong><small>+{achievement.amount} Medical Readiness XP</small></div></div>}
     </main>
   )
 }
@@ -173,6 +200,10 @@ function formatMet(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60) % 60
   const seconds = totalSeconds % 60
   return [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':')
+}
+
+function App() {
+  return <ErrorBoundary><div className="app-root overflow-x-hidden max-w-full"><AppContent /></div></ErrorBoundary>
 }
 
 export default App

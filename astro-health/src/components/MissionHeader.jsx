@@ -45,26 +45,26 @@ export function MissionHeader({ missions, missionId, setMissionId, crew, crewId,
         <div className="flex items-center gap-3">
           <div className="brand-mark"><Orbit size={23} strokeWidth={1.5} /></div>
           <div>
-            <p className="font-display text-sm font-bold tracking-[0.2em] text-white">ORION // HEALTH</p>
+            <p className="font-display text-sm font-bold tracking-[0.2em] text-white">SENTINEL // HEALTH</p>
             <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Aerospace Medical Operations</p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <CustomDropdown
-            label="Fase da Missão"
+            label="Mission Phase"
             value={missionId}
             options={missions}
             onChange={setMissionId}
             renderOption={(item, compact) => compact ? item.name : (
               <span className="mission-option">
                 <span><strong>{item.name}</strong><small>{item.context}</small></span>
-                <span className="mission-option-facts"><b>{item.gravity}</b><span>Latência: {item.latency}</span><em className={`radiation-${item.radiationLevel}`}>Radiação: {item.radiation}</em></span>
+                <span className="mission-option-facts"><b>{item.gravity}</b><span>Earth latency: {item.latency}</span><em className={`radiation-${item.radiationLevel}`}>Radiation: {item.radiation}</em></span>
               </span>
             )}
           />
           <div className="mission-facts">
-            <span>{mission.gravity}</span><i /> <span>Latência: {mission.latency}</span><i /> <span className={`radiation-${mission.radiationLevel}`}>Radiação: {mission.radiation}</span>
+            <span>{mission.gravity}</span><i /> <span>Earth latency: {mission.latency}</span><i /> <span className={`radiation-${mission.radiationLevel}`}>Radiation: {mission.radiation}</span>
           </div>
           <CustomDropdown
             className="crew-select"
@@ -72,8 +72,8 @@ export function MissionHeader({ missions, missionId, setMissionId, crew, crewId,
             options={crew}
             onChange={setCrewId}
             icon={CircleUserRound}
-            renderOption={(item, compact) => compact ? `${item.name} · ${item.gender}` : (
-              <span className="crew-option"><span><strong>{item.name}</strong><small>{item.role}</small></span><em>{item.gender}</em></span>
+            renderOption={(item, compact) => compact ? `${item.name} · ${item.gender === 'female' ? 'Female' : 'Male'}` : (
+              <span className="crew-option"><span><strong>{item.name}</strong><small>{item.role}</small></span><em>{item.gender === 'female' ? 'Female' : 'Male'}</em></span>
             )}
           />
           <div className="hidden items-center gap-2 text-right sm:flex">
