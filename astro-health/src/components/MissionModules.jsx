@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { Activity, Anchor, ArrowLeft, Brain, CircleAlert, Droplets, Dumbbell, FlaskConical, Gauge, HeartPulse, LockKeyhole, Package, Pill, Radiation, RotateCcw, Scale, ScanLine, Send, ShieldAlert, ShieldCheck, Timer, Trophy, UserRound } from 'lucide-react'
 import { EmergencyTriageForm } from './EmergencyTriageForm'
 import { OpticalBioScanner } from './OpticalBioScanner'
+import { NutritionalBiomarkerPanel } from './NutritionalBiomarkerPanel'
 import { crew as crewRoster } from '../data/missionData'
 
-export function MissionModules({ module, crew, mission, onModule, solarEvent, onAward, onDispatch, onOpticalHeartRate, opticalSnapshot, onOpticalSnapshot, onRadiationSync, onRadiationBurst }) {
-  if (module === 'female') return <FemaleHealth crew={crew} mission={mission} onModule={onModule} solarEvent={solarEvent} onAward={onAward} onRadiationSync={onRadiationSync} onRadiationBurst={onRadiationBurst} />
+export function MissionModules({ module, crew, mission, missionType, labResults, onRecordLabResult, onModule, solarEvent, onAward, onDispatch, onOpticalHeartRate, opticalSnapshot, onOpticalSnapshot, onRadiationSync, onRadiationBurst }) {
+  if (module === 'female') return <FemaleHealth crew={crew} mission={mission} missionType={missionType} labResults={labResults} onRecordLabResult={onRecordLabResult} onModule={onModule} solarEvent={solarEvent} onAward={onAward} onRadiationSync={onRadiationSync} onRadiationBurst={onRadiationBurst} />
   if (module === 'emergency') return <EmergencyGuided mission={mission} crew={crew} onModule={onModule} onAward={onAward} onDispatch={onDispatch} onOpticalHeartRate={onOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={onOpticalSnapshot} />
   return <CognitiveReadiness onModule={onModule} onAward={onAward} />
 }
@@ -14,7 +15,7 @@ function ModuleShell({ eyebrow, title, description, children, onModule }) {
   return <div className="module-page"><button type="button" className="back-link" onClick={() => onModule('dashboard')}><ArrowLeft size={14} /> Crew Dashboard</button><div className="module-hero"><p className="eyebrow">{eyebrow}</p><h2>{title}</h2><p>{description}</p></div>{children}</div>
 }
 
-function FemaleHealth({ crew, mission, onModule, solarEvent, onAward, onRadiationSync, onRadiationBurst }) {
+function FemaleHealth({ crew, mission, missionType, labResults, onRecordLabResult, onModule, solarEvent, onAward, onRadiationSync, onRadiationBurst }) {
   const [protocol, setProtocol] = useState('combined')
   const [cyclePhase, setCyclePhase] = useState('luteal')
   const [cycleDay, setCycleDay] = useState(22)
@@ -26,8 +27,6 @@ function FemaleHealth({ crew, mission, onModule, solarEvent, onAward, onRadiatio
   const [landingSeconds, setLandingSeconds] = useState(0)
   const [landingAwarded, setLandingAwarded] = useState(false)
   const [missionDay, setMissionDay] = useState(96)
-  const [biomarkerScan, setBiomarkerScan] = useState(false)
-  const [biomarkers, setBiomarkers] = useState({ homocysteine: 11.8, folate: 8.4, b12: 512, ferritin: 38 })
   const [eclssLogged, setEclssLogged] = useState(false)
   const [opticalScannerOpen, setOpticalScannerOpen] = useState(false)
   const [opticalDiagnostic, setOpticalDiagnostic] = useState(null)
@@ -50,9 +49,6 @@ function FemaleHealth({ crew, mission, onModule, solarEvent, onAward, onRadiatio
   const pillPotency = Math.max(0, 100 - missionDay * 0.018 - (solarEvent.active ? missionDay * 0.028 : 0))
   const completeOpticalDiagnostic = (result) => {
     setOpticalDiagnostic(result)
-    if (result.mode === 'anemia') {
-      setBiomarkers((current) => ({ ...current, ferritin: result.title === 'Normal Perfusion' ? 42 : 31 }))
-    }
     if (result.mode === 'calf') setCalfReading(true)
     onAward('optical-diagnostics-specialist', 75, 'Optical Diagnostics Specialist')
   }
@@ -70,7 +66,8 @@ function FemaleHealth({ crew, mission, onModule, solarEvent, onAward, onRadiatio
     {protocol === 'natural' && <article className="female-card cycle-card"><div className="female-card-heading"><div><p className="eyebrow"><Droplets size={13} /> ACTIVE NATURAL CYCLE</p><h3>{phaseInfo[cyclePhase]}</h3></div><strong>Day {cycleDay} <small>/ 28</small></strong></div><div className="cycle-wheel"><i style={{ transform: `rotate(${((cycleDay - 1) / 28) * 360}deg)` }} /></div><input aria-label="Cycle day" type="range" min="1" max="28" value={cycleDay} onChange={(event) => setCycleDay(Number(event.target.value))} /><div className="cycle-phases">{Object.entries({ menstrual: 'Menstrual', follicular: 'Follicular', ovulatory: 'Ovulatory', luteal: 'Luteal' }).map(([id, label]) => <button type="button" key={id} className={cyclePhase === id ? 'active' : ''} onClick={() => setCyclePhase(id)}>{label}</button>)}</div></article>}
     <div className="female-science-grid"><article className="female-card"><p className="eyebrow"><Gauge size={13} /> DYNAMIC VITAL-SIGN CALIBRATION</p><h3>Individual physiology recalibrated</h3><p className="module-copy">LYRA adjusts the green zone to prevent false alarms: during the luteal phase, basal body temperature accepts <strong>+0.4°C</strong>; Heart Rate Variability (HRV) is compared with the personal baseline, not an Earth average.</p><div className="calibration-values"><span><b>Basal temperature</b>36.9–37.5°C luteal</span><span><b>Reference HRV</b>62 ms · individual baseline</span></div></article><article className="female-card"><p className="eyebrow"><FlaskConical size={13} /> SPACE ANEMIA & IRON RADAR</p><h3>Bio-Analyzer · latest reading</h3><div className="lab-values"><span><b>12.4</b>g/dL<small>Hemoglobin</small></span><span><b>38</b>ng/mL<small>Ferritin</small></span></div><p className="module-copy">Microgravity accelerates red blood cell destruction. Prioritize dietary iron and record fatigue, dyspnea, or bleeding.</p><button type="button" className="female-action optical-launch-button" onClick={() => setOpticalScannerOpen(true)}>Launch Optical Bio-Check (Camera)</button><div className="eclss-note"><Droplets size={14} /> Waste protocol: segregate biological material to protect ECLSS water recycling.</div></article></div>
     <div className="female-science-grid"><article className="female-card"><p className="eyebrow"><Scale size={13} /> VENOUS THROMBOEMBOLISM (DVT) SCREENING</p><h3>Doppler / comparative calf assessment</h3><p className="module-copy">Compare left and right circumference to cross-reference venous stasis with current gravity: <strong>{mission.gravity}</strong>.</p><div className="calf-comparison"><span>Left <b>36.2 cm</b></span><span>Right <b>{calfReading ? '37.9 cm' : '—'}</b></span></div><button type="button" className="female-action" onClick={() => setCalfReading(true)}>{calfReading ? `Reading complete · ${calfRisk}` : 'Read calves with Doppler · 2s'}</button>{calfReading && <div className="risk-result"><strong>{calfRisk}</strong><small>Index cross-referenced with {mission.gravity} · repeat for pain, warmth, or edema</small></div>}</article><article className="female-card"><p className="eyebrow"><Dumbbell size={13} /> BONE & OVARIAN RESERVE PROTECTION</p><h3>ARED + cumulative dose</h3><div className="bone-meter"><div><span>Weekly resistive exercise</span><b>78%</b></div><i><em style={{ width: '78%' }} /></i><div><span>Radiation career dose</span><b>{solarEvent.active ? '30.1%' : '28.7%'}</b></div><i className="radiation-meter"><em style={{ width: `${solarEvent.active ? 30.1 : 28.7}%` }} /></i></div><p className="module-copy">Maintain ARED for bone mineral density and record dose for ovarian monitoring. Cumulative dose: <strong>{(172 + solarEvent.addedDose).toFixed(1)} mSv</strong>.</p></article></div>
-    <NeuroOcularCard biomarkers={biomarkers} biomarkerScan={biomarkerScan} setBiomarkerScan={setBiomarkerScan} setBiomarkers={setBiomarkers} />
+    <NeuroOcularCard />
+    <NutritionalBiomarkerPanel missionType={missionType} latestResults={labResults} onRecordLabResult={onRecordLabResult} />
     {protocol === 'natural' && <EclssLogisticsCard remainingMissionDays={remainingMissionDays} eclssLogged={eclssLogged} setEclssLogged={setEclssLogged} onAward={onAward} />}
     {opticalDiagnostic && <div className="optical-diagnostic-status"><strong>Optical reading logged · {opticalDiagnostic.title}</strong><span>{opticalDiagnostic.metric} · {new Date(opticalDiagnostic.timestamp).toLocaleString('en-US')}</span></div>}
     <OpticalBioScanner open={opticalScannerOpen} specialized initialMode="anemia" onClose={() => setOpticalScannerOpen(false)} onDiagnostic={completeOpticalDiagnostic} onRadiationSync={onRadiationSync} onRadiationBurst={onRadiationBurst} />
@@ -105,12 +102,8 @@ function PharmacokineticsCard({ missionDay, setMissionDay, pillPotency, solarEve
   return <article className="female-card female-tool-card"><p className="eyebrow"><Pill size={13} /> SPACE PHARMACOKINETICS & RADIATION SHELF-LIFE</p><h3>Onboard Pharmacy & Pharmacokinetics Analyzer</h3><button type="button" className="female-action optical-launch-button" onClick={onLaunchOptical}>Launch Optical Bio-Check (Camera)</button><div className="metric-table"><div className="metric-table-row metric-table-head"><span>Telemetry metric</span><b>Combined pill</b><b>Levonorgestrel IUD</b><b>Subdermal implant</b></div><div className="metric-table-row"><span>Microgravity hepatic absorption (CYP3A4 shift)</span><b>Variable</b><b>Low systemic load</b><b>Low systemic load</b></div><div className="metric-table-row"><span>VTE (clot) risk multiplier in 0g</span><b>1.8×</b><b>1.1×</b><b>1.2×</b></div><div className="metric-table-row"><span>Cosmic radiation degradation rate</span><b>High · oral blister packs</b><b>Low · implanted device</b><b>Low · implanted device</b></div></div><label className="tool-range">Mission Duration Forecast · Day {missionDay} of 900 (Mars round-trip)<input aria-label="Mission duration forecast" type="range" min="1" max="900" value={missionDay} onChange={(event) => setMissionDay(Number(event.target.value))} /></label><div className="calibration-values"><span><b>Oral pill potency forecast</b>{pillPotency.toFixed(1)}%</span><span><b>DONKI radiation modifier</b>{solarEvent.active ? 'Active SEP event · accelerated loss' : 'Nominal deep-space exposure'}</span></div>{recommendation && <div className="eclss-note"><CircleAlert size={14} /> Automated recommendation: switch from oral suppression to a non-oral method before launch or before potency falls below the operational threshold.</div>}</article>
 }
 
-function NeuroOcularCard({ biomarkers, biomarkerScan, setBiomarkerScan, setBiomarkers }) {
-  const runScan = () => {
-    setBiomarkerScan(true)
-    setBiomarkers({ homocysteine: 10.6, folate: 10.1, b12: 548, ferritin: 44 })
-  }
-  return <article className="female-card female-tool-card"><p className="eyebrow"><Brain size={13} /> SANS & MICRONUTRIENT CO-FACTOR MONITOR</p><h3>Neuro-Ocular & Vascular Biomarkers</h3><p className="module-copy">Monitor SANS-relevant vascular and optic-disc-edema risk alongside homocysteine, folate, vitamin B12, and iron stores. These Bio-Analyzer values support nutritional countermeasure decisions; they do not replace clinical assessment.</p><div className="biomarker-grid"><span><b>Homocysteine</b>{biomarkers.homocysteine} µmol/L</span><span><b>Folate</b>{biomarkers.folate} ng/mL</span><span><b>Vitamin B12</b>{biomarkers.b12} pg/mL</span><span><b>Iron / Ferritin</b>{biomarkers.ferritin} ng/mL</span></div><button type="button" className="female-action" onClick={runScan} disabled={biomarkerScan}><FlaskConical size={15} />{biomarkerScan ? 'Blood drop test logged · countermeasures updated' : 'Log Bio-Analyzer Blood Drop Test'}</button>{biomarkerScan && <div className="risk-result"><strong>Nutritional countermeasure updated</strong><small>Prioritize iron, folate, and B12 intake; continue SANS visual and vascular surveillance.</small></div>}</article>
+function NeuroOcularCard() {
+  return <article className="female-card female-tool-card"><p className="eyebrow"><Brain size={13} /> SANS & NUTRIENT CONTEXT</p><h3>Neuro-Ocular & Vascular Observations</h3><p className="module-copy">Review neuro-ocular and vascular observations alongside the recorded laboratory history. The lab values below are displayed as recorded and are not used to calculate a diagnosis or treatment recommendation.</p></article>
 }
 
 function EclssLogisticsCard({ remainingMissionDays, eclssLogged, setEclssLogged, onAward }) {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, CircleUserRound, Orbit, Sparkles } from 'lucide-react'
+import { ChevronDown, CircleUserRound, Sparkles } from 'lucide-react'
 
 function CustomDropdown({ label, value, options, onChange, renderOption, icon: Icon, className = '' }) {
   const [open, setOpen] = useState(false)
@@ -43,10 +43,10 @@ export function MissionHeader({ missions, missionId, setMissionId, crew, crewId,
     <header className="border-b border-slate-800/80 bg-[#090e17]/95">
       <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-5 px-5 py-4 lg:px-10">
         <div className="flex items-center gap-3">
-          <div className="brand-mark"><Orbit size={23} strokeWidth={1.5} /></div>
+          <div className="brand-mark"><img className="lyra-logo-image" src="/images/lyra-logo-mark.jpg" alt="LYRA logo" /></div>
           <div>
-            <p className="font-display text-sm font-bold tracking-[0.2em] text-white">LYRA // HEALTH</p>
-            <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Aerospace Medical Operations</p>
+            <p className="font-display text-sm font-bold tracking-[0.2em] text-white">LYRA</p>
+            <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Crew Care</p>
           </div>
         </div>
 

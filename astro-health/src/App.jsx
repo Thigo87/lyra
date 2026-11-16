@@ -10,6 +10,7 @@ import { EmergencyAlertBanner, TelemetryQueue } from './components/EmergencyDisp
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { crew, fallbackDonkiPayload, missions } from './data/missionData'
 import './App.css'
+import './VisualRedesign.css'
 
 function AppContent() {
   const [missionId, setMissionId] = useState('transit')
@@ -39,10 +40,16 @@ function AppContent() {
   const [wristbandZone, setWristbandZone] = useState('shelter')
   const [wristbandDose, setWristbandDose] = useState(0)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [themePreference, setThemePreference] = useState('circadian')
+  const [waiverFlagsByCrew, setWaiverFlagsByCrew] = useState({})
+  const [labResultsByCrew, setLabResultsByCrew] = useState({})
   const mission = useMemo(() => missions.find((item) => item.id === missionId), [missionId])
+  const missionType = mission?.missionType || 'DEEP_SPACE'
   const selectedCrew = crew.find((item) => item.id === crewId)
+  const selectedLabResults = crewId ? labResultsByCrew[crewId] || {} : {}
   const missionHour = Math.floor(missionSeconds / 3600) % 24
-  const circadianMode = missionHour >= 7 && missionHour < 19 ? 'theme-operational' : 'theme-decompression'
+  const isLightMode = themePreference === 'light' || (themePreference === 'circadian' && missionHour >= 7 && missionHour < 19)
+  const circadianMode = isLightMode ? 'theme-operational' : 'theme-decompression'
   const solarEvent = { active: stormSimulated, radiationRate: stormSimulated ? 420 : 80, addedDose: stormSimulated ? 8.4 : 0 }
   const gamification = {
     xp: readinessXp,
@@ -150,15 +157,29 @@ function AppContent() {
     setWristbandDose((dose) => dose + incrementalDose)
     awardXp(`bioband-sync-${Date.now()}`, 40, 'Bio-Band NFC Dose Sync')
   }
+  const updateCrewWaiverFlags = (conditions) => {
+    if (!selectedCrew) return
+    setWaiverFlagsByCrew((profiles) => ({ ...profiles, [selectedCrew.id]: conditions }))
+  }
+  const recordLabResult = (biomarkerId, value) => {
+    if (!selectedCrew || !Number.isFinite(value)) return
+    setLabResultsByCrew((profiles) => ({
+      ...profiles,
+      [selectedCrew.id]: {
+        ...profiles[selectedCrew.id],
+        [biomarkerId]: { value, recordedAt: new Date().toISOString() },
+      },
+    }))
+  }
 
-  if (!crewId && !emergencyAccess && activeView === 'overview') return <MissionOverview mission={mission} missions={missions} missionId={missionId} setMissionId={setMissionId} missionSeconds={missionSeconds} donkiStatus={donkiStatus} solarEvent={solarEvent} gamification={gamification} crew={crew} onUnlock={(id) => { setCrewId(null); setActiveView(`lock:${id}`) }} onEmergency={() => setEmergencyAccess(true)} />
+  if (!crewId && !emergencyAccess && activeView === 'overview') return <MissionOverview mission={mission} missions={missions} missionId={missionId} setMissionId={setMissionId} missionSeconds={missionSeconds} circadianMode={circadianMode} themePreference={themePreference} onThemePreferenceChange={setThemePreference} donkiStatus={donkiStatus} solarEvent={solarEvent} gamification={gamification} crew={crew} onUnlock={(id) => { setCrewId(null); setActiveView(`lock:${id}`) }} onEmergency={() => setEmergencyAccess(true)} />
 
   if (!crewId && !emergencyAccess) {
     const initialCrewId = activeView.startsWith('lock:') ? activeView.slice(5) : null
-    return <LockScreen crew={crew} initialCrewId={initialCrewId} onLogin={(id) => { setCrewId(id); setActiveView('workspace') }} onBack={() => setActiveView('overview')} onEmergency={() => setEmergencyAccess(true)} />
+    return <LockScreen crew={crew} initialCrewId={initialCrewId} circadianMode={circadianMode} onLogin={(id) => { setCrewId(id); setActiveView('workspace') }} onBack={() => setActiveView('overview')} onEmergency={() => setEmergencyAccess(true)} />
   }
 
-  if (emergencyAccess && !crewId) return <main className="emergency-standalone"><EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setEmergencyAccess(false)} /><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} /></main>
+  if (emergencyAccess && !crewId) return <main className={`emergency-standalone ${circadianMode}`}><EmergencyAlertBanner alert={activeAlert} onAcknowledge={acknowledgeAlert} onOpenProtocol={() => setEmergencyAccess(false)} /><MissionModules module="emergency" mission={mission} onModule={() => setEmergencyAccess(false)} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} /></main>
 
   return (
     <main className={`sentinel-app transition-colors duration-500 ${circadianMode} ${module === 'female' ? 'theme-rose' : ''}`}>
@@ -182,6 +203,8 @@ function AppContent() {
         donkiPayload={donkiPayload}
         donkiPayloadOpen={donkiPayloadOpen}
         setDonkiPayloadOpen={setDonkiPayloadOpen}
+        themePreference={themePreference}
+        onThemePreferenceChange={setThemePreference}
         activeCrew={selectedCrew}
         wristbandZone={wristbandZone}
         setWristbandZone={setWristbandZone}
@@ -192,11 +215,11 @@ function AppContent() {
         <Sidebar activeCrew={selectedCrew} module={module} setModule={(nextModule) => { setModule(nextModule); setMobileMenuOpen(false) }} mission={mission} onLock={lockTerminal} gamification={gamification} onAward={awardXp} mobileMenuOpen={mobileMenuOpen} />
         <section className="sentinel-content">
           {module === 'dashboard' ? (
-            <MissionDashboard mission={mission} crew={selectedCrew} selectedZone={selectedZone} setSelectedZone={setSelectedZone} onModule={setModule} solarEvent={solarEvent} gamification={gamification} opticalHeartRate={opticalHeartRate} onOpticalHeartRate={handleOpticalHeartRate} radiationDoseOffset={radiationDoseOffset} wristbandDose={wristbandDose} wristbandZone={wristbandZone} onWristbandSync={handleWristbandSync} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
+            <MissionDashboard mission={mission} missionType={missionType} labResults={selectedLabResults} onRecordLabResult={recordLabResult} crew={selectedCrew} selectedZone={selectedZone} setSelectedZone={setSelectedZone} onModule={setModule} solarEvent={solarEvent} gamification={gamification} opticalHeartRate={opticalHeartRate} onOpticalHeartRate={handleOpticalHeartRate} radiationDoseOffset={radiationDoseOffset} wristbandDose={wristbandDose} wristbandZone={wristbandZone} onWristbandSync={handleWristbandSync} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} activeConditions={waiverFlagsByCrew[selectedCrew.id] || []} onActiveConditionsChange={updateCrewWaiverFlags} />
           ) : module === 'history' ? (
             <div className="module-page"><button type="button" className="back-link" onClick={() => setModule('dashboard')}>← Crew Dashboard</button><CrewVitalsHistory /></div>
           ) : (
-            <MissionModules module={module} crew={selectedCrew} mission={mission} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
+            <MissionModules module={module} crew={selectedCrew} mission={mission} missionType={missionType} labResults={selectedLabResults} onRecordLabResult={recordLabResult} onModule={setModule} solarEvent={solarEvent} gamification={gamification} onAward={awardXp} onDispatch={dispatchAlert} onOpticalHeartRate={handleOpticalHeartRate} opticalSnapshot={opticalSnapshot} onOpticalSnapshot={setOpticalSnapshot} onRadiationSync={handleRadiationSync} onRadiationBurst={handleRadiationBurst} />
           )}
         </section>
       </div>
