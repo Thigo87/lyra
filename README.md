@@ -722,11 +722,6 @@ The following is a **suggested narrative** for a prototype demo. Adapt all inter
 - **Live application:** [https://www.lyracare.health/](https://www.lyracare.health/)
 - **Demo password:** `1234` (demonstration access only)
 - **NASA Space Apps project page:** [Os ReCINfences / Lyra: Crew Care](https://www.spaceappschallenge.org/2026/find-a-team/os-recinfences/?tab=project)
-- Screenshots: `[ACTUAL_SCREENSHOT_PATHS]`
-- Technical architecture: `[ARCHITECTURE_DOCUMENT_PATH]`
-- Model card and reproducibility notes: `[MODEL_CARD_PATH]`
-
-Do not add broken links or claim that these assets already exist.
 
 ## 19. Data and scientific foundations
 
