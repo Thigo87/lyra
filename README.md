@@ -1,4 +1,4 @@
-![logo](astro-health/public/images/lyra-logo-mark.jpg)
+![logo](astro-health/public/images/lyra_full.jpg)
 
 # Lyra: Crew Care — Autonomous Health Monitoring for Deep-Space Crews
 
