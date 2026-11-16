@@ -72,7 +72,7 @@ export function runDiagnostic(featuresArray) {
   const [highlightZone, pulseSpeed, statusColor] = cueByLabel[winner.label]
   const protocol = protocols[winner.label]
   const facialTelemetryNote = incongruenceDetected
-    ? `Facial micro-expression tension (${facialStressScore.toFixed(1)}/10) contradicts low self-reported symptom scores — potential symptom underreporting flagged by neural refinement.`
+    ? `The experimental facial-expression signal (${facialStressScore.toFixed(1)}/10) differs from the low self-reported symptom average; review both directly. This difference is not evidence of under-reporting.`
     : ''
   const baseActionSteps = Array.from({ length: 4 }, (_, index) => {
     const [title, instruction, durationSeconds, iconName] = index === 0 ? protocol : [
@@ -100,7 +100,7 @@ export function runDiagnostic(featuresArray) {
     facialTelemetryNote,
     justification: incongruenceDetected
       ? facialTelemetryNote
-      : `Facial telemetry is consistent with the declared symptom profile (${facialStressScore.toFixed(1)}/10).`,
+      : `No mismatch was flagged between the experimental facial-expression signal (${facialStressScore.toFixed(1)}/10) and the self-reported symptom average.`,
     actionSteps,
   }
 }

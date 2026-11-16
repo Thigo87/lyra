@@ -1,5 +1,6 @@
-import { Activity, Globe2, HeartPulse, Radio, ShieldAlert, Unlock } from 'lucide-react'
+import { Activity, HeartPulse, Radio, ShieldAlert, Unlock } from 'lucide-react'
 import { MissionEnvironmentDropdown } from './MissionEnvironmentDropdown'
+import { AIGeneratedContentDisclaimer } from './AIGeneratedContentDisclaimer'
 
 function formatMissionTime(totalSeconds) {
   const hours = Math.floor(totalSeconds / 3600) % 24
@@ -8,12 +9,13 @@ function formatMissionTime(totalSeconds) {
   return [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':')
 }
 
-export function MissionOverview({ mission, missions, missionId, setMissionId, missionSeconds, donkiStatus, solarEvent, gamification, crew, onUnlock, onEmergency }) {
-  return <main className="mission-overview">
+export function MissionOverview({ mission, missions, missionId, setMissionId, missionSeconds, circadianMode, themePreference, onThemePreferenceChange, donkiStatus, solarEvent, gamification, crew, onUnlock, onEmergency }) {
+  return <main className={`mission-overview ${circadianMode}`}>
     <header className="overview-header">
-      <div className="overview-brand"><div className="sentinel-logo"><Globe2 size={24} /></div><div><h1>LYRA</h1><p>Autonomous Crew & Women's Health</p></div></div>
-      <div className="overview-header-actions"><span className="overview-donki-pill"><span className="status-dot" /> {solarEvent.active ? 'NASA DONKI · SEP ALERT ACTIVE' : donkiStatus}</span><button type="button" className="overview-emergency-button" onClick={onEmergency}><ShieldAlert size={16} /> Medical Emergency Onboard (No PIN)</button></div>
+      <div className="overview-brand"><div className="sentinel-logo"><img className="lyra-logo-image" src="/images/lyra-logo-mark.jpg" alt="LYRA logo" /></div><div><h1>LYRA</h1><p>Crew Care</p></div></div>
+      <div className="overview-header-actions"><span className="overview-donki-pill"><span className="status-dot" /> {solarEvent.active ? 'NASA DONKI · SEP ALERT ACTIVE' : donkiStatus}</span><label className="theme-mode-control"><span>Appearance</span><select aria-label="Interface lighting mode" value={themePreference} onChange={(event) => onThemePreferenceChange(event.target.value)}><option value="circadian">Circadian</option><option value="light">Light</option><option value="dark">Dark</option></select></label><button type="button" className="overview-emergency-button" onClick={onEmergency}><ShieldAlert size={16} /> Medical Emergency Onboard (No PIN)</button></div>
     </header>
+    <AIGeneratedContentDisclaimer />
     <section className="overview-telemetry">
       <div className="overview-mission-select"><MissionEnvironmentDropdown value={missionId} options={missions} onChange={setMissionId} /></div>
       <div className="overview-metric"><small>GRAVITY</small><strong>{mission.gravity}</strong></div><div className="overview-metric"><small>EARTH COMMUNICATION LATENCY</small><strong>{mission.latency}</strong></div><div className="overview-metric"><small>AMBIENT RADIATION FLUX</small><strong>{mission.radiation} · {solarEvent.radiationRate} µSv/h</strong></div><div className="overview-metric"><small>MISSION ELAPSED TIME</small><strong>{formatMissionTime(missionSeconds)}</strong></div>

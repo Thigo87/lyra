@@ -110,8 +110,9 @@ export function FacialTelemetryMonitor({ declaredSymptomScore = 0, onStressScore
         <i className="facial-crosshair" /><span className="facial-feed-label">USER FACING · {status.toUpperCase()}</span>
       </div>
       <div className="facial-monitor-controls">
-        <div className="facial-monitor-score"><div><small>HIDDEN TENSION INDEX</small><strong>{score.toFixed(1)}<em>/10</em></strong></div><div className={`facial-status ${discrepancy ? 'warning' : 'nominal'}`}>{discrepancy ? <CircleAlert size={13} /> : <ShieldCheck size={13} />}{discrepancy ? 'Possible under-reporting' : 'Signal aligned'}</div></div>
-        <div className="facial-monitor-metrics"><span><small>OCULAR / BROW</small><b>{score >= 6 ? 'ELEVATED' : 'CALIBRATED'}</b></span><span><small>JAW / LIP</small><b>{score >= 5 ? 'TENSE' : 'RELAXED'}</b></span></div>
+        <div className="facial-monitor-score"><div><small>EXPRESSION TENSION ESTIMATE</small><strong>{score.toFixed(1)}<em>/10</em></strong></div><div className={`facial-status ${discrepancy ? 'warning' : 'nominal'}`}>{discrepancy ? <CircleAlert size={13} /> : <ShieldCheck size={13} />}{discrepancy ? 'Signal/report mismatch' : 'No mismatch flagged'}</div></div>
+        <div className="facial-monitor-metrics"><span><small>OCULAR / BROW</small><b>{score >= 6 ? 'HIGHER SIGNAL' : 'LOWER SIGNAL'}</b></span><span><small>JAW / LIP</small><b>{score >= 5 ? 'HIGHER SIGNAL' : 'LOWER SIGNAL'}</b></span></div>
+        <p className="ai-disclaimer facial-ai-disclaimer" role="note">Experimental, non-clinically validated camera-based expression signal; it may be inaccurate and cannot identify emotions or verify symptoms. A mismatch is a prompt for conversation, not evidence of under-reporting.</p>
         {error && <p className="facial-monitor-error">{error}</p>}
         <div className="facial-monitor-actions">{active ? <button type="button" onClick={stop}><CameraOff size={13} /> Pause Feed</button> : <button type="button" onClick={startCamera}><Camera size={13} /> Enable Camera</button>}<button type="button" onClick={startSimulation}><RefreshCw size={13} /> Simulation Mode</button></div>
         {!active && status === 'Requesting camera access' && <LoaderCircle className="facial-monitor-loader" size={14} />}

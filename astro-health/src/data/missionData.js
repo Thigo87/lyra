@@ -1,8 +1,9 @@
 export const missions = [
-  { id: 'orbit', name: 'Low Earth Orbit (ISS)', context: 'ISS', gravity: '0g', latency: '<1s', radiation: 'Low', radiationLevel: 'low', accent: '#55d6a5' },
-  { id: 'transit', name: 'Earth–Mars Transit (Deep Space)', context: 'Deep Space', gravity: '0g', latency: '14 min', radiation: 'Critical', radiationLevel: 'critical', accent: '#ff6b5f' },
-  { id: 'lunar', name: 'Lunar Surface (Artemis)', context: 'Artemis', gravity: '0.16g', latency: '1.3s', radiation: 'High', radiationLevel: 'high', accent: '#f5bc63' },
-  { id: 'mars', name: 'Mars Surface (Base)', context: 'Base', gravity: '0.38g', latency: '18 min', radiation: 'High', radiationLevel: 'high', accent: '#f5bc63' },
+  { id: 'orbit', missionType: 'LEO_ISS', name: 'Low Earth Orbit (ISS)', context: 'ISS', gravity: '0g', latency: '<1s', radiation: 'Low', radiationLevel: 'low', accent: '#55d6a5' },
+  { id: 'transit', missionType: 'MARS_TRANSIT', name: 'Earth–Mars Transit (Deep Space)', context: 'Deep Space', gravity: '0g', latency: '14 min', radiation: 'Critical', radiationLevel: 'critical', accent: '#ff6b5f' },
+  { id: 'artemis-orbital', missionType: 'ARTEMIS_ORBITAL', name: 'Artemis Orbital', context: 'Artemis', gravity: '0g', latency: '1.3s', radiation: 'High', radiationLevel: 'high', accent: '#f5bc63' },
+  { id: 'lunar', missionType: 'ARTEMIS_SURFACE', name: 'Lunar Surface (Artemis)', context: 'Artemis', gravity: '0.16g', latency: '1.3s', radiation: 'High', radiationLevel: 'high', accent: '#f5bc63' },
+  { id: 'mars', missionType: 'DEEP_SPACE', name: 'Mars Surface (Base)', context: 'Base', gravity: '0.38g', latency: '18 min', radiation: 'High', radiationLevel: 'high', accent: '#f5bc63' },
 ]
 
 export const crew = [

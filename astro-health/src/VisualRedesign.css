@@ -1,0 +1,1978 @@
+:root {
+  color-scheme: light;
+  --warm-canvas: #f3f1e9;
+  --warm-surface: #fffdf8;
+  --warm-border: #dedbd1;
+  --warm-primary: #54745b;
+  --warm-affection: #b7785e;
+  --warm-gold: #8b6636;
+  --warm-calm: #567d80;
+  --warm-text: #28332d;
+  --warm-muted: #59645d;
+  --warm-alert: #a64f49;
+  --warm-emergency: #a94842;
+}
+
+html,
+body,
+#root {
+  min-width: 320px;
+  background: var(--warm-canvas);
+}
+
+body {
+  color: var(--warm-text);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+button,
+select {
+  min-height: 44px;
+}
+
+.sentinel-app,
+.mission-overview,
+.lock-screen,
+.emergency-standalone {
+  color-scheme: light;
+  background: var(--warm-canvas);
+  color: var(--warm-text);
+  transition: background-color 500ms ease, color 500ms ease;
+}
+
+.sentinel-app {
+  --warm-canvas: #f3f1e9;
+  --warm-surface: #fffdf8;
+  --warm-border: #dedbd1;
+  --warm-primary: #54745b;
+  --warm-gold: #8b6636;
+  --warm-text: #28332d;
+  --warm-muted: #59645d;
+}
+
+.sentinel-app.theme-decompression {
+  color-scheme: dark;
+  --warm-canvas: #24231f;
+  --warm-surface: #302e29;
+  --warm-border: #4a463d;
+  --warm-primary: #d3b18a;
+  --warm-gold: #ddb778;
+  --warm-text: #f1ecdf;
+  --warm-muted: #c3bbad;
+  --warm-alert: #e58b7e;
+  --warm-emergency: #c5685d;
+}
+
+.mission-overview.theme-decompression,
+.lock-screen.theme-decompression,
+.emergency-standalone.theme-decompression {
+  color-scheme: dark;
+  --warm-canvas: #24231f;
+  --warm-surface: #302e29;
+  --warm-border: #4a463d;
+  --warm-primary: #d3b18a;
+  --warm-affection: #d48c70;
+  --warm-gold: #ddb778;
+  --warm-calm: #91b8b2;
+  --warm-text: #f1ecdf;
+  --warm-muted: #c3bbad;
+  --warm-alert: #e58b7e;
+  --warm-emergency: #c5685d;
+}
+
+.sentinel-app,
+.sentinel-app *,
+.mission-overview,
+.lock-screen,
+.emergency-standalone {
+  scrollbar-color: var(--warm-border) var(--warm-canvas);
+}
+
+.sentinel-app .sentinel-header,
+.sentinel-app .sentinel-sidebar,
+.sentinel-app .sentinel-content {
+  background-color: var(--warm-canvas);
+  border-color: var(--warm-border);
+}
+
+.sentinel-app .sentinel-header {
+  z-index: 60;
+  background: color-mix(in srgb, var(--warm-canvas) 94%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--warm-text) 5%, transparent);
+}
+
+.theme-mode-control {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--warm-border);
+  border-radius: 14px;
+  background: var(--warm-surface);
+  padding: 4px 10px 4px 13px;
+  color: var(--warm-muted);
+  font-size: 13px;
+}
+
+.theme-mode-control select {
+  min-height: 38px;
+  border: 0;
+  background: transparent;
+  color: var(--warm-text);
+  font: inherit;
+}
+
+.sentinel-app .sentinel-sidebar {
+  min-height: calc(100vh - 110px);
+  padding: 26px 18px;
+}
+
+.sentinel-app .sentinel-content {
+  padding: clamp(24px, 3.2vw, 48px);
+}
+
+.sentinel-app .panel,
+.sentinel-app .vital-card,
+.sentinel-app .dashboard-section,
+.sentinel-app [class*="-card"],
+.sentinel-app [class*="-panel"],
+.sentinel-app .history-card,
+.overview-crew-card,
+.overview-eclss,
+.lock-shell,
+.training-card {
+  border-color: var(--warm-border);
+  border-radius: 22px;
+  background: var(--warm-surface);
+  box-shadow: 0 10px 32px color-mix(in srgb, var(--warm-text) 5%, transparent);
+}
+
+.sentinel-app .vital-card,
+.sentinel-app .detail-card,
+.sentinel-app .module-card,
+.sentinel-app .history-card,
+.overview-crew-card {
+  padding: clamp(20px, 2.4vw, 30px);
+}
+
+.sentinel-app h1,
+.sentinel-app h2,
+.sentinel-app h3,
+.sentinel-app h4,
+.mission-overview h1,
+.mission-overview h2,
+.mission-overview h3,
+.lock-screen h1,
+.lock-screen h2,
+.lock-screen h3 {
+  color: var(--warm-text);
+  line-height: 1.25;
+}
+
+.sentinel-app p,
+.sentinel-app span,
+.sentinel-app small,
+.mission-overview p,
+.mission-overview small,
+.lock-screen p {
+  color: var(--warm-muted);
+}
+
+.sentinel-app .eyebrow {
+  color: var(--warm-primary);
+  font-size: 13px;
+  letter-spacing: .08em;
+}
+
+.sentinel-app .sentinel-logo,
+.sentinel-app .brand-mark {
+  width: 48px;
+  height: 48px;
+  border-color: var(--warm-primary);
+  border-radius: 16px;
+  color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 12%, var(--warm-surface));
+}
+
+.sentinel-logo .lyra-logo-image,
+.brand-mark .lyra-logo-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.sentinel-app .sentinel-brand h1 {
+  font-size: 21px;
+}
+
+.sentinel-app .sentinel-brand p {
+  font-size: 13px;
+}
+
+.sentinel-app .telemetry-badges span,
+.sentinel-app .sentinel-dropdown-trigger,
+.sentinel-app .donki-bar,
+.sentinel-app .select-shell,
+.sentinel-app .custom-dropdown-menu {
+  border-color: var(--warm-border);
+  border-radius: 15px;
+  background: var(--warm-surface);
+  color: var(--warm-text);
+}
+
+.sentinel-app .telemetry-badges span {
+  min-height: 58px;
+  padding: 9px 14px;
+}
+
+.sentinel-app .telemetry-badges b {
+  color: var(--warm-muted);
+  font-size: 11px;
+  letter-spacing: .06em;
+}
+
+.sentinel-app .telemetry-badges strong,
+.sentinel-app .mission-option strong,
+.sentinel-app .crew-option strong,
+.sentinel-app .custom-dropdown-value {
+  color: var(--warm-text);
+  font-size: 15px;
+}
+
+.sentinel-app .donki-bar {
+  min-height: 42px;
+  padding-inline: 28px;
+  font-size: 13px;
+}
+
+.sentinel-app .donki-bar .status-dot {
+  box-shadow: none;
+}
+
+.sentinel-app .emergency-button,
+.mission-overview .overview-emergency-button {
+  min-height: 48px;
+  border-color: var(--warm-emergency);
+  border-radius: 16px;
+  background: var(--warm-emergency);
+  color: #fffaf4;
+  font-size: 14px;
+}
+
+.sentinel-app .module-nav {
+  display: grid;
+  gap: 7px;
+  padding: 24px 0;
+}
+
+.sentinel-app .module-nav button {
+  min-height: 56px;
+  gap: 13px;
+  border-left-width: 3px;
+  border-radius: 15px;
+  padding: 12px 14px;
+  color: var(--warm-muted);
+  font-size: 15px;
+  transition: background-color 220ms ease, color 220ms ease, transform 220ms ease;
+}
+
+.sentinel-app .module-nav button svg {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+}
+
+.sentinel-app .module-nav button:hover {
+  transform: translateX(2px);
+}
+
+.sentinel-app .module-nav button.active {
+  border-left-color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 13%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app .sidebar-label {
+  color: var(--warm-muted);
+  font: 600 12px 'Atkinson Hyperlegible', sans-serif;
+  letter-spacing: .08em;
+}
+
+.sentinel-app .crew-profile-button,
+.sentinel-app .readiness-panel,
+.sentinel-app .sidebar-context,
+.sentinel-app .offline-badge {
+  border-color: var(--warm-border);
+  border-radius: 17px;
+  background: var(--warm-surface);
+  padding: 14px;
+}
+
+.sentinel-app .crew-profile-button strong,
+.sentinel-app .readiness-panel > strong,
+.sentinel-app .sidebar-context strong {
+  color: var(--warm-text);
+  font-size: 15px;
+}
+
+.sentinel-app .crew-profile-button small,
+.sentinel-app .sidebar-context span,
+.sentinel-app .sidebar-context small,
+.sentinel-app .offline-badge span {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sentinel-app .quest-button {
+  min-height: 46px;
+  gap: 8px;
+  border-radius: 12px;
+  padding: 9px;
+  font-size: 14px;
+}
+
+.sentinel-app .sidebar-context {
+  margin-top: 20px;
+}
+
+.sentinel-app .lock-terminal-button {
+  min-height: 48px;
+  border-radius: 15px;
+  font-size: 14px;
+}
+
+.sentinel-app .crew-heading {
+  margin-bottom: 32px;
+}
+
+.sentinel-app .crew-heading h2 {
+  margin: 8px 0;
+  font-size: clamp(28px, 3.2vw, 38px);
+}
+
+.sentinel-app .crew-heading > div > p:last-child {
+  color: var(--warm-muted);
+  font-size: 16px;
+}
+
+.sentinel-app .breadcrumb {
+  color: var(--warm-muted);
+  font-size: 14px;
+}
+
+.sentinel-app .dashboard-readiness {
+  border-color: var(--warm-border);
+  border-radius: 17px;
+  background: var(--warm-surface);
+  padding: 14px 18px;
+  color: var(--warm-muted);
+  font: 14px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .dashboard-readiness > div {
+  color: var(--warm-primary);
+}
+
+.sentinel-app .dashboard-readiness > div span {
+  color: var(--warm-text);
+}
+
+.sentinel-app .dashboard-readiness > div > svg {
+  width: 21px;
+  height: 21px;
+}
+
+.sentinel-app .dashboard-readiness > strong {
+  color: var(--warm-gold);
+  font: 600 14px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .state-badge {
+  border-color: var(--warm-primary);
+  border-radius: 12px;
+  color: var(--warm-primary);
+  font: 600 13px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .state-badge.attention {
+  border-color: var(--warm-gold);
+  color: var(--warm-gold);
+}
+
+.sentinel-app .nominal-badge {
+  border-color: var(--warm-primary);
+  border-radius: 14px;
+  color: var(--warm-primary);
+  font: 600 13px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .section-heading {
+  margin-bottom: 20px;
+}
+
+.sentinel-app .section-heading h3 {
+  font-size: 24px;
+}
+
+.sentinel-app .section-heading h3 span {
+  font-size: 16px;
+}
+
+.sentinel-app .dashboard-section {
+  margin-bottom: 28px;
+  padding: clamp(18px, 2.4vw, 30px);
+}
+
+.sentinel-app .body-detail-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .86fr);
+  gap: 20px;
+}
+
+.sentinel-app .body-detail-grid > .panel {
+  min-height: 580px;
+  border-radius: 22px;
+}
+
+.sentinel-app .detail-card {
+  border-radius: 22px;
+}
+
+.sentinel-app .detail-card h3 {
+  font-size: 25px;
+}
+
+.sentinel-app .detail-card-top p:last-child,
+.sentinel-app .detail-block li,
+.sentinel-app .detail-block ol li span {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.sentinel-app .detail-block h4 {
+  font-size: 17px;
+}
+
+.sentinel-app .detail-block li {
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sentinel-app .detail-block li svg {
+  flex: 0 0 auto;
+  margin-top: 4px;
+  color: var(--warm-primary);
+}
+
+.sentinel-app .detail-block ol li b,
+.sentinel-app .nominal-badge {
+  min-width: 34px;
+  min-height: 34px;
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.sentinel-app .detail-action,
+.sentinel-app .female-action,
+.sentinel-app .radiation-dosimeter-button,
+.sentinel-app .wristband-sync-button {
+  min-height: 48px;
+  border-radius: 15px;
+  padding: 11px 15px;
+  font-size: 15px;
+}
+
+.sentinel-app .vitals-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.sentinel-app .vitals-grid .vital-card {
+  min-height: 220px;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.sentinel-app .vital-card-top {
+  align-items: center;
+  gap: 8px;
+}
+
+.sentinel-app .vital-card .icon-tile {
+  color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 12%, var(--warm-canvas));
+}
+
+.sentinel-app .icon-tile {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+}
+
+.sentinel-app .icon-tile svg {
+  width: 25px;
+  height: 25px;
+}
+
+.sentinel-app .vital-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--warm-primary);
+  font-size: 13px;
+}
+
+.sentinel-app .vital-status.monitor {
+  color: var(--warm-gold);
+}
+
+.sentinel-app .vital-card > p {
+  margin: 18px 0 5px;
+  color: var(--warm-muted);
+  font-size: 16px;
+}
+
+.sentinel-app .vital-card > strong {
+  color: var(--warm-text);
+  font-size: 32px;
+  line-height: 1.25;
+}
+
+.sentinel-app .vital-card > strong small {
+  color: var(--warm-muted);
+  font-size: 16px;
+}
+
+.sentinel-app .vital-normal {
+  min-height: 0;
+  margin-top: 7px;
+  color: var(--warm-muted);
+  font: 14px/1.45 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .vital-education,
+.sentinel-app .education-disclosure {
+  margin-top: 14px;
+  border: 1px solid var(--warm-border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--warm-canvas) 60%, var(--warm-surface));
+  padding: 12px 14px;
+}
+
+.sentinel-app .vital-education summary,
+.sentinel-app .education-disclosure summary {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 10px;
+  color: var(--warm-primary);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+  list-style: none;
+}
+
+.sentinel-app .vital-education summary::-webkit-details-marker,
+.sentinel-app .education-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.sentinel-app .vital-education summary::after,
+.sentinel-app .education-disclosure summary::after {
+  margin-left: auto;
+  content: '+';
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.sentinel-app .vital-education[open] summary::after,
+.sentinel-app .education-disclosure[open] summary::after {
+  content: '−';
+}
+
+.sentinel-app .vital-education p,
+.sentinel-app .education-disclosure p {
+  margin: 10px 0 2px;
+  color: var(--warm-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.sentinel-app .radiation-breakdown {
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.sentinel-app .radiation-breakdown span {
+  border-color: var(--warm-border);
+  border-radius: 13px;
+  background: var(--warm-canvas);
+  padding: 10px;
+  color: var(--warm-text);
+  font-size: 14px;
+}
+
+.sentinel-app .radiation-breakdown b {
+  color: var(--warm-muted);
+  font-size: 12px;
+}
+
+.sentinel-app .radiation-dosimeter-button,
+.sentinel-app .wristband-sync-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border-color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 12%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app .history-metric-tabs button,
+.sentinel-app .history-detail-actions button {
+  min-height: 44px;
+  border-color: var(--warm-border);
+  border-radius: 13px;
+  background: var(--warm-surface);
+  padding: 8px 12px;
+  color: var(--warm-muted);
+  font-size: 14px;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.sentinel-app .history-metric-tabs button:hover,
+.sentinel-app .history-detail-actions button:hover {
+  border-color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 8%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app .history-metric-tabs button.active {
+  border-color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 13%, var(--warm-surface));
+  color: var(--warm-primary);
+}
+
+.sentinel-app .recalibration-card {
+  grid-column: 1 / -1;
+  gap: 20px;
+  border-radius: 20px;
+  padding: 22px;
+}
+
+.sentinel-app .recalibration-card h4 {
+  font-size: 21px;
+}
+
+.sentinel-app .recalibration-card p:not(.eyebrow) {
+  color: var(--warm-muted);
+  font-size: 16px;
+}
+
+.sentinel-app .condition-monitoring {
+  --warm-canvas: #141716;
+  --warm-surface: #212523;
+  --warm-border: #343a37;
+  --warm-primary: #7a9e7e;
+  --warm-gold: #e5b567;
+  --warm-calm: #7fb3b5;
+  --warm-text: #efece6;
+  --warm-muted: #a39e93;
+  --warm-alert: #d96b66;
+  background: var(--warm-canvas);
+}
+
+.sentinel-app.theme-decompression .condition-monitoring {
+  --warm-canvas: #181615;
+  --warm-surface: #252220;
+}
+
+.sentinel-app .condition-safety-note,
+.sentinel-app .condition-simulation-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid var(--warm-border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--warm-primary) 8%, var(--warm-surface));
+  padding: 14px 16px;
+  color: var(--warm-muted);
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.sentinel-app .condition-safety-note svg,
+.sentinel-app .condition-simulation-status svg {
+  flex: 0 0 auto;
+  color: var(--warm-primary);
+}
+
+.sentinel-app .condition-selector,
+.sentinel-app .simulation-controls,
+.sentinel-app .proxy-biomarkers-panel {
+  border: 1px solid var(--warm-border);
+  border-radius: 20px;
+  background: var(--warm-surface);
+  padding: clamp(18px, 2.4vw, 26px);
+}
+
+.sentinel-app .condition-selector-heading,
+.sentinel-app .simulation-controls-heading,
+.sentinel-app .condition-card-heading,
+.sentinel-app .proxy-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.sentinel-app .condition-selector-heading {
+  margin-bottom: 16px;
+}
+
+.sentinel-app .condition-selector h4,
+.sentinel-app .simulation-controls h4,
+.sentinel-app .condition-monitor-card h4,
+.sentinel-app .proxy-biomarkers-panel h4 {
+  margin: 0;
+  color: var(--warm-text);
+  font: 600 20px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .condition-selector-heading p,
+.sentinel-app .simulation-controls-heading p,
+.sentinel-app .proxy-panel-note,
+.sentinel-app .condition-card-guidance,
+.sentinel-app .condition-card-description,
+.sentinel-app .condition-card-disclaimer,
+.sentinel-app .condition-operational-action p,
+.sentinel-app .condition-environment-note {
+  margin: 5px 0 0;
+  color: var(--warm-muted);
+  font-family: 'Atkinson Hyperlegible', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.sentinel-app .condition-preset-button,
+.sentinel-app .condition-simulate-button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--warm-primary);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--warm-primary) 10%, var(--warm-surface));
+  padding: 10px 14px;
+  color: var(--warm-text);
+  font: 600 15px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .condition-flag-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sentinel-app .condition-flag {
+  display: flex;
+  min-width: 0;
+  min-height: 74px;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--warm-border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--warm-canvas) 52%, var(--warm-surface));
+  padding: 12px 14px;
+  color: var(--warm-text);
+  cursor: pointer;
+}
+
+.sentinel-app .condition-flag input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  accent-color: var(--warm-primary);
+}
+
+.sentinel-app .condition-flag-copy {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+}
+
+.sentinel-app .condition-flag-copy strong {
+  color: var(--warm-text);
+  font: 600 16px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .condition-flag-copy small {
+  color: var(--warm-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.sentinel-app .condition-flag > svg {
+  color: var(--warm-primary);
+}
+
+.sentinel-app .simulation-controls {
+  margin-top: 14px;
+}
+
+.sentinel-app .simulation-mode-badge {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--warm-gold) 55%, var(--warm-border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--warm-gold) 10%, var(--warm-surface));
+  padding: 5px 11px;
+  color: var(--warm-gold);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sentinel-app .condition-simulation-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.sentinel-app .condition-simulation-controls label {
+  display: grid;
+  flex: 1 1 260px;
+  min-width: min(240px, 100%);
+  gap: 6px;
+  color: var(--warm-muted);
+  font: 600 14px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .condition-simulation-controls select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--warm-border);
+  border-radius: 13px;
+  background: var(--warm-canvas);
+  padding: 8px 12px;
+  color: var(--warm-text);
+  font: 15px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .condition-simulate-button {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.sentinel-app .condition-simulate-button[aria-pressed='true'] {
+  border-color: var(--warm-gold);
+  background: color-mix(in srgb, var(--warm-gold) 12%, var(--warm-surface));
+}
+
+.sentinel-app .condition-simulation-status {
+  margin: 12px 0 0;
+  border-color: color-mix(in srgb, var(--warm-gold) 45%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-gold) 8%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app .condition-monitor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.sentinel-app .condition-monitor-card {
+  min-width: 0;
+  border: 1px solid var(--warm-border);
+  border-radius: 19px;
+  background: var(--warm-surface);
+  padding: 20px;
+}
+
+.sentinel-app .condition-card-kicker {
+  margin: 0 0 4px;
+  color: var(--warm-muted);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.sentinel-app .condition-status,
+.sentinel-app .proxy-coverage-badge {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  border: 1px solid var(--warm-primary);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--warm-primary) 10%, var(--warm-surface));
+  padding: 5px 10px;
+  color: var(--warm-primary);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.sentinel-app .condition-status.deviation {
+  border-color: var(--warm-gold);
+  background: color-mix(in srgb, var(--warm-gold) 12%, var(--warm-surface));
+  color: var(--warm-gold);
+}
+
+.sentinel-app .condition-card-description {
+  margin-top: 4px;
+}
+
+.sentinel-app .condition-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.sentinel-app .condition-signal {
+  display: grid;
+  gap: 5px;
+  border: 1px solid var(--warm-border);
+  border-radius: 13px;
+  background: var(--warm-canvas);
+  padding: 10px 12px;
+}
+
+.sentinel-app .condition-signal.has-deviation {
+  border-color: color-mix(in srgb, var(--warm-gold) 58%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-gold) 8%, var(--warm-canvas));
+}
+
+.sentinel-app .condition-signal span,
+.sentinel-app .condition-signal strong {
+  color: var(--warm-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.sentinel-app .condition-signal strong {
+  color: var(--warm-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.sentinel-app .condition-signal.has-deviation strong {
+  color: var(--warm-gold);
+}
+
+.sentinel-app .condition-operational-action {
+  margin-top: 14px;
+  border-left: 3px solid var(--warm-primary);
+  border-radius: 0 12px 12px 0;
+  background: color-mix(in srgb, var(--warm-primary) 8%, var(--warm-surface));
+  padding: 11px 13px;
+}
+
+.sentinel-app .condition-operational-action > strong {
+  color: var(--warm-primary);
+  font: 700 14px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .condition-operational-action p {
+  margin-top: 4px;
+  color: var(--warm-text);
+}
+
+.sentinel-app .condition-card-guidance {
+  margin-top: 14px;
+}
+
+.sentinel-app .condition-card-disclaimer {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.sentinel-app .condition-empty-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  border: 1px dashed var(--warm-border);
+  border-radius: 16px;
+  padding: 16px;
+  color: var(--warm-muted);
+}
+
+.sentinel-app .condition-empty-state p {
+  margin: 0;
+  color: var(--warm-muted);
+}
+
+.sentinel-app .proxy-biomarkers-panel {
+  margin-top: 16px;
+}
+
+.sentinel-app .proxy-panel-heading {
+  align-items: flex-start;
+}
+
+.sentinel-app .proxy-panel-note {
+  max-width: 880px;
+  margin-top: 10px;
+}
+
+.sentinel-app .proxy-biomarker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.sentinel-app .proxy-biomarker {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  border: 1px solid var(--warm-border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--warm-canvas) 52%, var(--warm-surface));
+  padding: 12px;
+}
+
+.sentinel-app .proxy-biomarker strong {
+  color: var(--warm-text);
+  font: 600 16px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .proxy-biomarker span,
+.sentinel-app .proxy-biomarker small {
+  color: var(--warm-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.sentinel-app .nutritional-biomarkers-panel {
+  --warm-canvas: #141716;
+  --warm-surface: #212523;
+  --warm-border: #343a37;
+  --warm-primary: #7a9e7e;
+  --warm-gold: #e5b567;
+  --warm-text: #efece6;
+  --warm-muted: #a39e93;
+  margin-top: 16px;
+}
+
+.sentinel-app .biomarker-record-source {
+  color: var(--warm-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.sentinel-app .biomarker-current-value,
+.sentinel-app .biomarker-baseline-comparison {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--warm-border);
+  border-radius: 12px;
+  background: var(--warm-canvas);
+  padding: 10px;
+}
+
+.sentinel-app .biomarker-current-value > span,
+.sentinel-app .biomarker-baseline-comparison > span {
+  color: var(--warm-muted);
+  font-size: 12px;
+}
+
+.sentinel-app .proxy-biomarker .biomarker-current-value > strong,
+.sentinel-app .biomarker-baseline-comparison > strong {
+  color: var(--warm-text);
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.sentinel-app .biomarker-current-value small {
+  color: var(--warm-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sentinel-app .biomarker-baseline-comparison {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.sentinel-app .biomarker-update-control {
+  display: grid;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.sentinel-app .biomarker-update-control > label {
+  color: var(--warm-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sentinel-app .biomarker-update-control > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+.sentinel-app .biomarker-update-control input {
+  min-width: 0;
+  min-height: 42px;
+  border: 1px solid var(--warm-border);
+  border-radius: 10px;
+  background: var(--warm-canvas);
+  padding: 8px;
+  color: var(--warm-text);
+  font: 15px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .biomarker-update-control button {
+  min-height: 42px;
+  border: 1px solid var(--warm-primary);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--warm-primary) 12%, var(--warm-surface));
+  padding: 8px 10px;
+  color: var(--warm-text);
+  font: 600 12px 'Nunito Sans', sans-serif;
+  cursor: pointer;
+}
+
+.sentinel-app .biomarker-update-control button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sentinel-app .biomarker-updated-at {
+  color: var(--warm-muted);
+  font-size: 11px;
+}
+
+.sentinel-app .proxy-correlates-heading {
+  margin: 22px 0 0;
+  color: var(--warm-text);
+  font: 600 17px 'Nunito Sans', sans-serif;
+}
+
+.sentinel-app .proxy-correlated-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 11px;
+}
+
+.sentinel-app .proxy-correlate {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  border: 1px solid var(--warm-border);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--warm-canvas) 52%, var(--warm-surface));
+  padding: 11px 12px;
+}
+
+.sentinel-app .proxy-correlate span {
+  color: var(--warm-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.sentinel-app .proxy-correlate strong {
+  color: var(--warm-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.sentinel-app .proxy-correlate.has-deviation {
+  border-color: color-mix(in srgb, var(--warm-gold) 58%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-gold) 8%, var(--warm-canvas));
+}
+
+.sentinel-app .proxy-correlate.has-deviation strong {
+  color: var(--warm-gold);
+}
+
+.sentinel-app .condition-environment-note {
+  margin-top: 14px;
+}
+
+.sentinel-app .quick-metrics {
+  gap: 10px;
+}
+
+.sentinel-app .quick-metrics span {
+  border-color: var(--warm-border);
+  border-radius: 14px;
+  background: var(--warm-canvas);
+  color: var(--warm-text);
+  font: 15px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app .quick-metrics b {
+  color: var(--warm-muted);
+  font: 14px 'Atkinson Hyperlegible', sans-serif;
+}
+
+.sentinel-app :focus-visible,
+.mission-overview :focus-visible,
+.lock-screen :focus-visible {
+  outline: 3px solid var(--warm-calm);
+  outline-offset: 3px;
+}
+
+.sentinel-app .mobile-menu-button {
+  width: 48px;
+  height: 48px;
+  border-color: var(--warm-border);
+  border-radius: 15px;
+  background: var(--warm-surface);
+  color: var(--warm-text);
+}
+
+.sentinel-app .mobile-sidebar-close {
+  display: none;
+}
+
+.sentinel-app .wristband-status-pill,
+.sentinel-app .notification-trigger {
+  border-color: var(--warm-border);
+  border-radius: 14px;
+  background: var(--warm-surface);
+  color: var(--warm-primary);
+}
+
+.sentinel-app .overview-telemetry,
+.mission-overview .overview-telemetry,
+.mission-overview .overview-header {
+  border-color: var(--warm-border);
+}
+
+.mission-overview .overview-header {
+  background: color-mix(in srgb, var(--warm-canvas) 96%, transparent);
+}
+
+.mission-overview .overview-brand h1,
+.mission-overview .overview-section-heading h2,
+.mission-overview .overview-crew-card h3 {
+  color: var(--warm-text);
+}
+
+.mission-overview .overview-brand p,
+.mission-overview .overview-footer,
+.mission-overview .overview-crew-facts small,
+.mission-overview .overview-vitals-grid small,
+.mission-overview .overview-eclss-grid small {
+  color: var(--warm-muted);
+}
+
+.mission-overview .overview-content {
+  width: min(1240px, calc(100% - 48px));
+  padding-top: 46px;
+}
+
+.mission-overview .overview-crew-card {
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.mission-overview .overview-avatar {
+  width: 54px;
+  height: 54px;
+  border-color: var(--warm-primary);
+  background: color-mix(in srgb, var(--warm-primary) 12%, var(--warm-surface));
+  color: var(--warm-primary);
+  font-size: 16px;
+}
+
+.mission-overview .overview-crew-card h3 {
+  font-size: 26px;
+}
+
+.mission-overview .overview-crew-facts span,
+.mission-overview .overview-vitals-grid span,
+.mission-overview .overview-eclss {
+  border-color: var(--warm-border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--warm-canvas) 48%, var(--warm-surface));
+}
+
+.mission-overview .overview-crew-facts b,
+.mission-overview .overview-vitals-grid b,
+.mission-overview .overview-eclss-grid b {
+  color: var(--warm-text);
+  font-size: 14px;
+}
+
+.mission-overview .overview-vitals-heading,
+.mission-overview .overview-eclss-heading,
+.mission-overview .overview-crew-role,
+.mission-overview .overview-section-heading .eyebrow {
+  color: var(--warm-primary);
+  font-size: 13px;
+}
+
+.mission-overview .overview-unlock-button {
+  min-height: 52px;
+  border-color: var(--warm-primary);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--warm-primary) 12%, var(--warm-surface));
+  color: var(--warm-text);
+  font-size: 15px;
+}
+
+.overview-donki-pill,
+.overview-live-badge {
+  border-color: var(--warm-border);
+  background: var(--warm-surface);
+  color: var(--warm-primary);
+  font-size: 13px;
+}
+
+.overview-mission-select,
+.overview-metric {
+  border-color: var(--warm-border);
+  border-radius: 16px;
+  background: var(--warm-surface);
+}
+
+.overview-metric small,
+.overview-mission-select label {
+  color: var(--warm-muted);
+  font-size: 12px;
+}
+
+.mission-overview .overview-metric strong {
+  color: var(--warm-text);
+  font-size: 16px;
+}
+
+.sentinel-app .history-axis-label {
+  fill: var(--warm-muted);
+  font: 11px 'IBM Plex Mono', monospace;
+}
+
+.sentinel-app .history-chart-point text {
+  fill: var(--warm-muted);
+}
+
+.sentinel-app .emergency-alert-banner {
+  border-radius: 18px;
+}
+
+.sentinel-app .sentinel-content > * {
+  animation: module-enter 260ms ease both;
+}
+
+@keyframes module-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1023px) {
+  .sentinel-app .sentinel-sidebar {
+    width: 245px;
+    flex-basis: 245px;
+  }
+
+  .sentinel-app .sentinel-content {
+    padding: 24px;
+  }
+
+  .sentinel-app .body-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sentinel-app .body-detail-grid > .panel {
+    min-height: 0;
+  }
+
+  .sentinel-app .condition-monitor-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sentinel-app .proxy-biomarker-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .sentinel-app .sentinel-header {
+    z-index: 45;
+  }
+
+  .sentinel-app .condition-selector-heading,
+  .sentinel-app .simulation-controls-heading,
+  .sentinel-app .condition-card-heading,
+  .sentinel-app .proxy-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sentinel-app .condition-flag-grid,
+  .sentinel-app .condition-signal-grid,
+  .sentinel-app .proxy-biomarker-grid,
+  .sentinel-app .proxy-correlated-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sentinel-app .condition-simulation-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sentinel-app .condition-simulation-controls label,
+  .sentinel-app .condition-simulate-button,
+  .sentinel-app .condition-preset-button {
+    width: 100%;
+  }
+
+  .sentinel-app .biomarker-update-control > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sentinel-app .header-primary {
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .sentinel-app .header-identity {
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  .sentinel-app .sentinel-brand {
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .sentinel-app .sentinel-brand p {
+    display: none;
+  }
+
+  .sentinel-app .sentinel-brand h1 {
+    font-size: 19px;
+  }
+
+  .sentinel-app .header-actions {
+    width: auto;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-left: auto;
+  }
+
+  .sentinel-app .header-crew-status {
+    gap: 0;
+  }
+
+  .sentinel-app .header-crew-badge {
+    display: none;
+  }
+
+  .sentinel-app .wristband-status-pill,
+  .sentinel-app .notification-trigger,
+  .sentinel-app .emergency-button {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    justify-content: center;
+    border-radius: 14px;
+    padding: 0;
+  }
+
+  .sentinel-app .emergency-button span {
+    display: none;
+  }
+
+  .sentinel-app .wristband-status-pill {
+    gap: 0;
+    overflow: hidden;
+    font-size: 0;
+  }
+
+  .sentinel-app .wristband-status-pill .wristband-pulse-dot {
+    display: none;
+  }
+
+  .sentinel-app .wristband-status-pill svg,
+  .sentinel-app .notification-trigger svg,
+  .sentinel-app .emergency-button svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+  }
+
+  .sentinel-app .header-telemetry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .sentinel-app .sentinel-mission-controls {
+    order: 0;
+  }
+
+  .sentinel-app .sentinel-body {
+    display: block;
+  }
+
+  .sentinel-app .sentinel-sidebar {
+    position: fixed;
+    z-index: 55;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(86vw, 340px);
+    min-height: 0;
+    overflow-y: auto;
+    visibility: hidden;
+    border-right: 1px solid var(--warm-border);
+    box-shadow: 18px 0 48px color-mix(in srgb, var(--warm-text) 15%, transparent);
+    transform: translateX(-105%);
+    transition: transform 260ms ease;
+  }
+
+  .sentinel-app .mobile-sidebar-close {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    min-height: 46px;
+    place-items: center;
+    align-self: flex-end;
+    margin-bottom: 12px;
+    border: 1px solid var(--warm-border);
+    border-radius: 15px;
+    background: var(--warm-canvas);
+    color: var(--warm-text);
+  }
+
+  .sentinel-app .sentinel-sidebar.mobile-open {
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .sentinel-app .mobile-drawer-backdrop {
+    position: fixed;
+    z-index: 50;
+    inset: 0;
+    background: color-mix(in srgb, var(--warm-text) 35%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .sentinel-app .mobile-menu-button {
+    display: grid;
+  }
+
+  .sentinel-app .sentinel-content {
+    padding: 22px 18px 36px;
+  }
+
+  .sentinel-app .dashboard-section {
+    padding: 18px;
+  }
+
+  .sentinel-app .section-heading,
+  .sentinel-app .crew-heading,
+  .sentinel-app .vital-header-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sentinel-app .history-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .sentinel-app .history-metric-tabs {
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .sentinel-app .history-metric-tabs button {
+    flex: 0 0 auto;
+  }
+
+  .sentinel-app .vitals-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sentinel-app .vitals-grid .vital-card {
+    min-height: 0;
+  }
+
+  .sentinel-app .recalibration-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sentinel-app .telemetry-badges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .sentinel-app .telemetry-badges span {
+    min-height: 50px;
+    padding: 6px 10px;
+    white-space: normal;
+  }
+
+  .sentinel-app .telemetry-badges b,
+  .sentinel-app .telemetry-badges strong {
+    white-space: normal;
+  }
+
+  .sentinel-app .sidebar-context {
+    display: block;
+  }
+
+  .sentinel-app .donki-bar {
+    display: flex;
+    min-height: 44px;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 6px 14px;
+  }
+
+  .sentinel-app .donki-source {
+    display: none;
+  }
+
+  .sentinel-app .donki-bar .donki-status {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sentinel-app .donki-bar button {
+    flex: 0 0 auto;
+    min-width: 0;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .sentinel-app .donki-bar .donki-json-button {
+    font-size: 0;
+  }
+
+  .sentinel-app .donki-bar .donki-json-button::after {
+    content: 'Payload';
+    font-size: 12px;
+  }
+
+  .sentinel-app .donki-bar button:last-of-type {
+    margin-left: 0;
+    font-size: 0;
+  }
+
+  .sentinel-app .donki-bar button:last-of-type::after {
+    content: 'Solar event';
+    font-size: 12px;
+  }
+
+  .mission-overview .overview-content {
+    width: calc(100% - 28px);
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 540px) {
+  .sentinel-app .sentinel-header-main {
+    padding: 10px 14px;
+  }
+
+  .sentinel-app .sentinel-brand {
+    min-width: 0;
+  }
+
+  .sentinel-app .sentinel-brand p {
+    max-width: 210px;
+    font-size: 12px;
+  }
+
+  .sentinel-app .header-actions {
+    justify-content: flex-start;
+  }
+
+  .sentinel-app .header-crew-status {
+    flex-wrap: wrap;
+  }
+
+  .sentinel-app .sentinel-content {
+    padding-inline: 14px;
+  }
+
+  .sentinel-app .dashboard-section {
+    padding: 15px;
+  }
+
+  .sentinel-app .section-heading h3 {
+    font-size: 22px;
+  }
+
+  .sentinel-app .quick-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mission-overview .overview-vitals-grid,
+  .mission-overview .overview-eclss-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* Logo-aligned palette: soft arctic daylight and low-glare deep-space night. */
+:root {
+  color-scheme: light;
+  --warm-canvas: #eaf1f4;
+  --warm-surface: #f5f8f9;
+  --warm-border: #c4d2d8;
+  --warm-primary: #176879;
+  --warm-affection: #9c624f;
+  --warm-gold: #795a2d;
+  --warm-calm: #2c7885;
+  --warm-text: #18303c;
+  --warm-muted: #52666e;
+  --warm-alert: #a3434b;
+  --warm-emergency: #923f4d;
+}
+
+.sentinel-app,
+.mission-overview,
+.lock-screen,
+.emergency-standalone {
+  --warm-canvas: #eaf1f4;
+  --warm-surface: #f5f8f9;
+  --warm-border: #c4d2d8;
+  --warm-primary: #176879;
+  --warm-affection: #9c624f;
+  --warm-gold: #795a2d;
+  --warm-calm: #2c7885;
+  --warm-text: #18303c;
+  --warm-muted: #52666e;
+  --warm-alert: #a3434b;
+  --warm-emergency: #923f4d;
+  color-scheme: light;
+  background-color: var(--warm-canvas);
+  color: var(--warm-text);
+}
+
+.sentinel-app.theme-decompression,
+.mission-overview.theme-decompression,
+.lock-screen.theme-decompression,
+.emergency-standalone.theme-decompression {
+  --warm-canvas: #071925;
+  --warm-surface: #102735;
+  --warm-border: #294652;
+  --warm-primary: #79c5ce;
+  --warm-affection: #d29a83;
+  --warm-gold: #dfbd7d;
+  --warm-calm: #8bc6cb;
+  --warm-text: #e4eff1;
+  --warm-muted: #aec1c6;
+  --warm-alert: #e99a92;
+  --warm-emergency: #cf706e;
+  color-scheme: dark;
+  background-color: var(--warm-canvas);
+  color: var(--warm-text);
+}
+
+.sentinel-app .condition-monitoring,
+.sentinel-app .nutritional-biomarkers-panel {
+  --warm-canvas: #eaf1f4;
+  --warm-surface: #f5f8f9;
+  --warm-border: #c4d2d8;
+  --warm-primary: #176879;
+  --warm-affection: #9c624f;
+  --warm-gold: #795a2d;
+  --warm-calm: #2c7885;
+  --warm-text: #18303c;
+  --warm-muted: #52666e;
+  --warm-alert: #a3434b;
+  --warm-emergency: #923f4d;
+}
+
+.sentinel-app.theme-decompression .condition-monitoring,
+.sentinel-app.theme-decompression .nutritional-biomarkers-panel {
+  --warm-canvas: #071925;
+  --warm-surface: #102735;
+  --warm-border: #294652;
+  --warm-primary: #79c5ce;
+  --warm-affection: #d29a83;
+  --warm-gold: #dfbd7d;
+  --warm-calm: #8bc6cb;
+  --warm-text: #e4eff1;
+  --warm-muted: #aec1c6;
+  --warm-alert: #e99a92;
+  --warm-emergency: #cf706e;
+}
+
+.sentinel-app.theme-rose .module-nav button.active {
+  border-left-color: var(--warm-affection);
+  background: color-mix(in srgb, var(--warm-affection) 11%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app.theme-rose .module-nav button.active i {
+  background: var(--warm-affection);
+  box-shadow: none;
+}
+
+.sentinel-app.theme-rose .female-card,
+.sentinel-app.theme-rose .female-tool-card,
+.sentinel-app.theme-rose .female-protocol-selector {
+  border-color: color-mix(in srgb, var(--warm-affection) 46%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-affection) 7%, var(--warm-surface));
+}
+
+.sentinel-app.theme-rose .female-action {
+  border-color: color-mix(in srgb, var(--warm-affection) 60%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-affection) 12%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app.theme-rose .female-action:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--warm-affection) 20%, var(--warm-surface));
+}
+
+.sentinel-app.theme-rose .female-card-heading > strong,
+.sentinel-app.theme-rose .female-status-strip > div,
+.sentinel-app.theme-rose .biomarker-grid b,
+.sentinel-app.theme-rose .lab-values b {
+  color: var(--warm-affection);
+}
+
+.sentinel-app.theme-rose .protocol-step,
+.sentinel-app.theme-rose .risk-result {
+  border-color: color-mix(in srgb, var(--warm-affection) 46%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-affection) 7%, var(--warm-surface));
+  color: var(--warm-text);
+}
+
+.sentinel-app.theme-rose .tool-range input,
+.sentinel-app.theme-rose input[type="range"] {
+  accent-color: var(--warm-affection);
+}
+
+.sentinel-dropdown-trigger {
+  border-color: var(--warm-border);
+  background: var(--warm-surface);
+  color: var(--warm-text);
+}
+
+.sentinel-dropdown-trigger small,
+.sentinel-dropdown-menu small,
+.sentinel-dropdown-menu em {
+  color: var(--warm-muted);
+}
+
+.sentinel-dropdown-menu {
+  border-color: var(--warm-border);
+  background: var(--warm-surface);
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--warm-text) 16%, transparent);
+}
+
+.sentinel-dropdown-menu button {
+  color: var(--warm-text);
+}
+
+.sentinel-dropdown-menu button:hover,
+.sentinel-dropdown-menu button.active {
+  border-color: color-mix(in srgb, var(--warm-primary) 40%, var(--warm-border));
+  background: color-mix(in srgb, var(--warm-primary) 10%, var(--warm-surface));
+}
+
+.sentinel-dropdown-menu b {
+  color: var(--warm-text);
+}
+
+.sentinel-app .sentinel-logo,
+.mission-overview .sentinel-logo,
+.lock-screen .sentinel-logo {
+  border-color: #397e8a;
+  background: #0b2330;
+  color: #79c5ce;
+}
+
+.mission-overview .overview-vitals-grid .pulse-vital > svg {
+  color: var(--warm-affection);
+  animation: lyra-heart-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes lyra-heart-pulse {
+  50% {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 3px color-mix(in srgb, var(--warm-affection) 50%, transparent));
+  }
+}
+
+.sentinel-app .ai-disclaimer,
+.emergency-standalone .ai-disclaimer,
+.mission-overview .ai-disclaimer {
+  border: 1px solid color-mix(in srgb, var(--warm-calm) 34%, var(--warm-border));
+  border-left: 3px solid var(--warm-calm);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--warm-calm) 7%, var(--warm-surface));
+  padding: 11px 14px;
+  color: var(--warm-muted);
+  font: 400 14px/1.55 'Atkinson Hyperlegible', 'Segoe UI', sans-serif;
+}
+
+.sentinel-app .triage-ai-disclaimer,
+.emergency-standalone .triage-ai-disclaimer {
+  margin: 12px 0 18px;
+}
+
+.sentinel-app .facial-ai-disclaimer,
+.emergency-standalone .facial-ai-disclaimer {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.sentinel-app .triage-result-disclaimer,
+.emergency-standalone .triage-result-disclaimer {
+  margin: 14px 0;
+}
+
+.sentinel-app .history-ai-disclaimer,
+.emergency-standalone .history-ai-disclaimer {
+  margin: 0 0 16px;
+}
+
+.mission-overview .ai-generated-content-disclaimer {
+  width: min(960px, calc(100% - 32px));
+  margin: 12px auto;
+  text-align: left;
+}

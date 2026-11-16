@@ -1,4 +1,5 @@
-import { Activity, Brain, ClipboardList, HeartPulse, LockKeyhole, ShieldAlert, Trophy, Zap } from 'lucide-react'
+import { Activity, Brain, ClipboardList, HeartPulse, LockKeyhole, ShieldAlert, Trophy, X, Zap } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 const modules = [
   { id: 'dashboard', label: 'Crew Dashboard', icon: Activity },
@@ -9,8 +10,15 @@ const modules = [
 ]
 
 export function Sidebar({ activeCrew, module, setModule, mission, onLock, gamification, onAward, mobileMenuOpen }) {
+  const sidebarRef = useRef(null)
   const modulesForCrew = activeCrew.id === 'aurora' ? modules : modules.filter((item) => item.id !== 'female')
-  return <aside className={`sentinel-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+
+  useEffect(() => {
+    if (mobileMenuOpen) sidebarRef.current?.scrollTo({ top: 0 })
+  }, [mobileMenuOpen])
+
+  return <aside ref={sidebarRef} className={`sentinel-sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+    {mobileMenuOpen && <button type="button" className="mobile-sidebar-close" aria-label="Close navigation" onClick={() => setModule(module)}><X size={22} /></button>}
     <div className="sidebar-crew">
       <p className="sidebar-label">AUTHENTICATED CREW MEMBER</p>
       <div className="crew-profile-button locked"><span className="crew-avatar">{activeCrew.name.slice(-1)}</span><span><strong>{activeCrew.name}</strong><small>{activeCrew.role} · {activeCrew.age} years · {activeCrew.profile} profile</small></span><LockKeyhole size={14} /></div>
