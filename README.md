@@ -858,7 +858,7 @@ Open a pull request against the project's designated development branch and expl
 - **Demo slides (PDF):** [Lyra: Crew Care — Presentation](https://drive.google.com/file/d/1oEDi8F9vWqBlcdeQEoyFHMYB0tioIiHu/view?usp=sharing)
 - **Live app:** [https://www.lyracare.health/](https://www.lyracare.health/)
 - **Demo password:** `1234` (demo only; not suitable for real sensitive data)
-- **Source repository:** `[REPOSITORY_URL]` — add the actual URL when confirmed
+- **Source repository:** [Lyra repository](https://github.com/Thigo87/lyra)
 
 ### Team — Os ReCINfences
 
