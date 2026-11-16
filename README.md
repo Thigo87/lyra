@@ -6,11 +6,19 @@
 
 > **Your health cannot wait for a signal from Earth.**
 
+**Team:** Os ReCINfences  
+**NASA Space Apps project:** [Lyra: Crew Care — Os ReCINfences](https://www.spaceappschallenge.org/2026/find-a-team/os-recinfences/?tab=project)  
+**Live application:** [lyracare.health](https://www.lyracare.health/)  
+**Demo slides:** [Lyra: Crew Care — Presentation (PDF)](https://drive.google.com/file/d/1oEDi8F9vWqBlcdeQEoyFHMYB0tioIiHu/view?usp=sharing)  
+**Demo password:** `1234` (for the demonstration environment only)
+
 **Lyra: Crew Care** is a web application designed to help astronauts monitor their health during long-duration space missions, including situations in which communication with Earth is delayed or unavailable. The project brings together a **neural network developed by our team**, accessible health monitoring for **non-medical crew members**, an **individualized perspective on female health**, and an **offline-first operating model**.
 
 The goal is not simply to display measurements. It is to help crew members understand **what changed, why it matters, what can be verified, and which approved onboard procedure to consult**—without presenting artificial intelligence as a medical professional.
 
-> **Repository documentation note:** This README documents the product concept and provides cross-platform setup instructions for the **React + TypeScript + Vite architecture proposed in our project documentation**. The actual repository tree, package scripts, machine-learning runtime, model architecture, and evaluation metrics were **not available for inspection when this file was prepared**. Folder paths explicitly labeled *illustrative*, commands for optional components, and fields in `[BRACKETS]` must be checked against the repository before publication. Do not describe proposed features as implemented unless demonstrated.
+> **Repository documentation note:** This README combines team-provided project information with cross-platform setup instructions for the **React + TypeScript + Vite reference architecture** described in our previous documentation. The actual source tree, package scripts, machine-learning runtime, model architecture, and evaluation metrics have **not been independently checked against the repository**. Paths marked *illustrative*, conditional commands, and remaining placeholders should be reconciled with the source code before publication. Do not describe a planned feature as verified merely because it appears in this README.
+>
+> **Demo security:** The shared passcode `1234` is intended **only for the public demonstration**. It is not a secure password for personal health data or a production deployment. Replace it with proper authentication before any real-world use.
 
 ## Table of contents
 
@@ -434,6 +442,8 @@ npm.cmd run dev
 
 Open the local address printed in the terminal. For a default Vite project it is usually **<http://localhost:5173>**, but the configured port can differ.
 
+For a build that exposes the same demonstration login as the live application, the supplied **demo passcode** is `1234`. Whether this credential applies to local builds depends on the repository's authentication configuration; do not assume it is an administrative password.
+
 Stop the development server with **Ctrl + C**.
 
 ## 12. Run on Linux
@@ -706,10 +716,12 @@ The following is a **suggested narrative** for a prototype demo. Adapt all inter
 8. **Communication loss:** Disconnect the network and demonstrate the features proven to work offline.
 9. **Wrap-up:** Show the event record and, if present, an asynchronous report queue.
 
-### Suggested project assets
+### Project assets
 
-- Demo video: `[VIDEO_URL]`
-- Live prototype: `[APPLICATION_URL]`
+- **Demo slides (PDF):** [Lyra: Crew Care — Presentation](https://drive.google.com/file/d/1oEDi8F9vWqBlcdeQEoyFHMYB0tioIiHu/view?usp=sharing)
+- **Live application:** [https://www.lyracare.health/](https://www.lyracare.health/)
+- **Demo password:** `1234` (demonstration access only)
+- **NASA Space Apps project page:** [Os ReCINfences / Lyra: Crew Care](https://www.spaceappschallenge.org/2026/find-a-team/os-recinfences/?tab=project)
 - Screenshots: `[ACTUAL_SCREENSHOT_PATHS]`
 - Technical architecture: `[ARCHITECTURE_DOCUMENT_PATH]`
 - Model card and reproducibility notes: `[MODEL_CARD_PATH]`
@@ -729,13 +741,17 @@ NASA resources can inform problem framing, biological risk selection, and the de
 | [NASA Human Spaceflight Standards](https://www.nasa.gov/ochmo/human-spaceflight-and-aviation-standards/) | Human factors and crew-health requirements | Citing standards does not establish compliance |
 | [NASA Open APIs](https://api.nasa.gov/) | Optional mission/environmental context | Space-weather events are not direct individual dose measurements |
 
-### Actual datasets used
+### Dataset declared in the project submission
 
-Before submission, replace this section with a **specific table** containing each actual dataset or generated data source, its link or citation, license/access status, participant or organism type, features selected, preprocessing, and role in training versus demonstration.
+The dataset reference provided by the team for the NASA Space Apps submission is:
 
-| Dataset | Source | Real or synthetic | Used for | License/access |
-|---|---|---|---|---|
-| `[DATASET_NAME]` | `[URL/CITATION]` | `[REAL/SYNTHETIC]` | `[TRAINING/EVALUATION/DEMO]` | `[TERMS]` |
+| Dataset name in submission | URL | Source type | Reported usage |
+|---|---|---|---|
+| **NASA's dataset** | [NASA Open Data — Dataset Catalog](https://data.nasa.gov/dataset/) | NASA open-data catalog | Project dataset reference supplied by the team |
+
+**Dataset traceability:** The URL above leads to a **NASA dataset catalog**, not to one uniquely identifiable dataset record. The specific dataset title/identifier, variables used, download date, access terms, preprocessing, and whether the source was used for **neural-network training, validation, or the demonstration** have not been provided. Those details must be recorded from the actual experiments before making reproducibility or performance claims. This source is distinct from the [NASA Open Science Data Repository (OSDR)](https://science.nasa.gov/biological-physical/data/osdr/) listed above as a scientific reference.
+
+If any example health measurements were artificially generated, clearly label them as synthetic and list their generation method separately from actual NASA datasets.
 
 Use explicit **SIMULATED DATA** labels in UI captures or demos that show generated astronaut health records. Never present synthetic measurements as real astronaut observations.
 
@@ -837,41 +853,50 @@ Open a pull request against the project's designated development branch and expl
 
 ### NASA Space Apps Challenge
 
-- Challenge: <https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/>
-- Project page: `[SPACE_APPS_PROJECT_URL]`
-- Demo video: `[VIDEO_URL]`
-- Live app: `[APPLICATION_URL]`
-- Source repository: `[REPOSITORY_URL]`
+- **Challenge:** [Health Monitoring Software for Astronauts on Space Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/)
+- **Project page:** [Os ReCINfences — Lyra: Crew Care](https://www.spaceappschallenge.org/2026/find-a-team/os-recinfences/?tab=project)
+- **Demo slides (PDF):** [Lyra: Crew Care — Presentation](https://drive.google.com/file/d/1oEDi8F9vWqBlcdeQEoyFHMYB0tioIiHu/view?usp=sharing)
+- **Live app:** [https://www.lyracare.health/](https://www.lyracare.health/)
+- **Demo password:** `1234` (demo only; not suitable for real sensitive data)
+- **Source repository:** `[REPOSITORY_URL]` — add the actual URL when confirmed
 
-### Team
+### Team — Os ReCINfences
 
-- Team name: `[TEAM_NAME]`
-- Members and roles: `[NAMES_AND_ROLES]`
-- Contact: `[PUBLIC_CONTACT_OR_ISSUE_TRACKER]`
+| Member | Contact |
+|---|---|
+| **Arthur Albuquerque** | [aas13@cin.ufpe.br](mailto:aas13@cin.ufpe.br) |
+| **Arthur Duque** | [adcp@cin.ufpe.br](mailto:adcp@cin.ufpe.br) |
+| **Luiz Fernando** | [lfmn2@cin.ufpe.br](mailto:lfmn2@cin.ufpe.br) |
+| **Mel Zion** | [mzc@cin.ufpe.br](mailto:mzc@cin.ufpe.br) |
+| **Thiago Clemente** | [tlocs@cin.ufpe.br](mailto:tlocs@cin.ufpe.br) |
 
-### License
+**Primary technical contact:** [aas13@cin.ufpe.br](mailto:aas13@cin.ufpe.br)
 
-**License: `[CHOSEN_LICENSE]`**. Include a real `LICENSE` file only after the team selects the distribution terms. Third-party datasets, code, icons, and model artifacts may have independent license or attribution requirements.
+### License — MIT
+
+This repository is distributed under the **MIT License**. See the [`LICENSE`](LICENSE) file for the complete terms. Copyright © 2026 Os ReCINfences.
+
+The MIT license applies to the original project code and documentation for which the team holds rights. **Third-party datasets, pretrained models, libraries, imagery, and other assets may have separate licenses or usage restrictions**, which are not overridden by this license.
 
 ---
 
 ## 24. Pre-publication checklist
 
-> Maintainers: **complete this section before linking the README in the NASA submission**. These are editorial checks, not features already verified.
+The checks below confirm **README metadata and editorial updates** supplied for the submission. They are not evidence that the production build, clinical safety, model metrics, deployment security, or offline behavior has been independently verified.
 
-- [ ] Add the official team name and repository/demo links for **Lyra: Crew Care**.
-- [ ] Confirm the repository's **actual** package manager, runtime versions, and install/start commands.
-- [ ] Replace the illustrative directory tree with the **real** directory and file names.
-- [ ] Identify the exact model architecture, input features, output format, dependencies, artifact path, and invocation route.
-- [ ] Provide model-training and evaluation provenance, with **measured** metrics only.
-- [ ] Explain what female-specific information is actually collected, how consent works, and how it changes analysis.
-- [ ] Mark implemented, partially implemented, and proposed features accurately.
-- [ ] Verify the offline demo from a cold reload and test whether inference really works without an external API.
-- [ ] Document which NASA datasets were actually used and distinguish them from background references.
-- [ ] Review all medical statements and remove unsupported clinical claims.
-- [ ] Confirm no secrets, private medical records, unlicensed datasets, or restricted model weights are committed.
-- [ ] Add real screenshots, demo video, instructions for reproducing the featured scenario, and appropriate licenses.
-- [ ] Remove this checklist and the introductory documentation note only after its issues are resolved.
+- [x] Use the official name **Lyra: Crew Care** throughout the README.
+- [x] Add the team name **Os ReCINfences**.
+- [x] List all five team members and their contact email addresses.
+- [x] Link the official **NASA Space Apps project page**.
+- [x] Replace **Demo video** with the team's **Demo slides (PDF)** link.
+- [x] Add the **live application** URL.
+- [x] Document the default **demo password `1234`** and its demonstration-only security limitation.
+- [x] Cite the user-supplied **NASA's dataset** reference and its catalog URL, without inventing an individual dataset identifier.
+- [x] State that the project uses the **MIT License** and include a `LICENSE` file.
+- [x] Preserve the project's **neural network**, **female-specific analysis**, **non-medical user experience**, and **offline-first** motivations.
+- [x] Retain Windows, Linux, and macOS development setup instructions and clarify that commands require repository verification.
+
+**Technical verification still required before claiming deployment readiness:** inspect the real repository and package scripts; verify the model architecture, inputs, outputs, source datasets, performance, and inference path; replace the illustrative directory tree; test a production build and cold-start offline behavior; review whether the `1234` demo credential is sufficiently isolated from real data; review dataset and image rights; and run reproducible accessibility, privacy, and security tests. These technical checks have **not** been marked as completed here.
 
 ---
 

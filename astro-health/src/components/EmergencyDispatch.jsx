@@ -5,7 +5,7 @@ export function NotificationCenter({ notifications, activeCount, onAcknowledge, 
   const [open, setOpen] = useState(false)
   return <div className="notification-center">
     <button type="button" className="notification-trigger" aria-label="Open notifications" onClick={() => setOpen((value) => !value)}>
-      <Bell size={19} />{activeCount > 0 && <span className="notification-count absolute -top-1.5 -right-1.5 w-5 h-5 min-w-[20px] rounded-full bg-rose-600 text-white text-[11px] font-bold flex items-center justify-center leading-none shrink-0">{activeCount}</span>}
+      <Bell size={19} />{activeCount > 0 && <span className="notification-count">{activeCount}</span>}
     </button>
     {open && <div className="notification-popover">
       <div className="notification-popover-head"><div><strong>Alert Center</strong><small>Spacecraft intranet · critical history</small></div><Bell size={16} /></div>
